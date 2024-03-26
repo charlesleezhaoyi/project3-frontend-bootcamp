@@ -93,7 +93,7 @@ const NewBook = () => {
                 type="text"
                 onChange={(e) => setAuthor(e.target.value)}
               />
-              <TextInput
+              <TextArea
                 label="Description"
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}

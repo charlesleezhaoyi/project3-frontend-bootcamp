@@ -8,6 +8,7 @@ import { TextInput } from "../components/Input.js";
 
 const SingleBook = () => {
   const [loadBook, setLoadBook] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -53,7 +54,7 @@ const SingleBook = () => {
                 {" "}
                 Request this book
               </button>
-              <dialog id="my_modal_1" className="modal">
+              <dialog id="request_modal" className="modal">
                 <div className="modal-box">
                   <h3 className="font-bold text-lg">!</h3>
                   <p className="py-4">
