@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import LogoutButton from "../LogoutButton";
 
 const Settings = ({ open, setOpen }) => {
   return (
@@ -60,6 +61,7 @@ const Settings = ({ open, setOpen }) => {
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
                       {/* Your content */}
+                      <LogoutButton />
                     </div>
                   </div>
                 </Dialog.Panel>

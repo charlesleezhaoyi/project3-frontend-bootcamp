@@ -41,7 +41,14 @@ root.render(
               </AuthWrapper>
             }
           />
-          <Route path="/onboarding" element={<Onboarding />}></Route>
+          <Route
+            path="/onboarding"
+            element={
+              <AuthWrapper>
+                <Onboarding />
+              </AuthWrapper>
+            }
+          ></Route>
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
             <Route path="create" element={<ForumCreate />} />

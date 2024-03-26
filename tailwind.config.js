@@ -21,7 +21,13 @@ getAllJSFile("./src");
 module.exports = {
   content: componentFiles,
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        orange: {
+          100: "#FFEDD5",
+        },
+      },
+    },
   },
   plugins: [
     require("daisyui"),

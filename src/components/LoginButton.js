@@ -8,7 +8,11 @@ const LoginButton = () => {
     await loginWithRedirect();
   };
 
-  return <button onClick={loginAndRedirect}>Log In</button>;
+  return (
+    <button className="btn btn-primary" onClick={loginAndRedirect}>
+      Log In
+    </button>
+  );
 };
 
 export default LoginButton;

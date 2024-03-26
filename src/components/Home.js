@@ -4,11 +4,13 @@ import React from "react";
 import NavBar from "../components/Common/NavBar";
 import BookList from "../components/Dashboard/BookList";
 import CategoryList from "../components/Dashboard/CategoryList";
+import SearchBar from "./Dashboard/SearchBar";
 
 const Home = () => {
   return (
     <div>
       <NavBar />
+      <SearchBar onSearch={(term) => console.log(term)} />
       <CategoryList />
       <BookList />
       {/* <LoginButton />
