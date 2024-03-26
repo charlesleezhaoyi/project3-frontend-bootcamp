@@ -43,13 +43,9 @@ export default function ForumCreate({ type }) {
       if (!contentInput.length) {
         throw new Error("Content cannot be empty");
       }
-
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/users/${user.email}`
-      );
       const categories = choosenCategories.map((option) => option.value);
       const postData = {
-        authorId: data.id,
+        authorEmail: user.email,
         title: titleInput,
         content: contentInput,
         categories,
