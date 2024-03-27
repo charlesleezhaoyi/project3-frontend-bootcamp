@@ -7,7 +7,7 @@ import "./index.css";
 import App from "./App";
 import AuthWrapper from "./components/AuthWrapper";
 import Forum from "./components/Forum/Forum";
-import ForumMainPage from "./components/Forum/ForumMainPage";
+import ForumMainPage from "./components/Forum/ForumMain/ForumMainPage";
 import ForumCreate from "./components/Forum/ForumCreate";
 import Onboarding from "./components/Onboarding/OnboardingForm";
 

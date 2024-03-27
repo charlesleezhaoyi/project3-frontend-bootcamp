@@ -63,7 +63,9 @@ export default function ForumCreate({ type }) {
   return (
     <div>
       <div className="flex items-center py-5 space-x-5">
-        <ArrowBackOutlinedIcon fontSize="large" />
+        <button className="btn btn-ghost" onClick={() => navigate(-1)}>
+          <ArrowBackOutlinedIcon fontSize="large" />
+        </button>
         <b className="text-2xl">Create {type}:</b>
       </div>
       <div className="artboard phone-2 border-2 border-neutral rounded-xl flex flex-col justify-around items-center mb-5">
