@@ -10,6 +10,8 @@ import Forum from "./components/Forum/Forum";
 import ForumMainPage from "./components/Forum/ForumMain/ForumMainPage";
 import ForumCreate from "./components/Forum/ForumCreate";
 import Onboarding from "./components/Onboarding/OnboardingForm";
+import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection";
+import ForumPost from "./components/Forum/ForumPost/ForumPost";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -53,6 +55,11 @@ root.render(
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
             <Route path="create/post" element={<ForumCreate type="post" />} />
+            <Route
+              path="categories/:categoryName"
+              element={<ForumSubSection />}
+            />
+            <Route path="posts/:postId" element={<ForumPost />} />
           </Route>
           {/* <Route path="*" element={"Nothing here!"} /> */}
         </Route>
