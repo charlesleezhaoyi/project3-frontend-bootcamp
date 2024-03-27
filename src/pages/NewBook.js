@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import { TextArea, TextInput, FileInput } from "../components/Input";
+import { TextArea, TextInput, FileInput } from "../components/Common/Input";
 import { BACKEND_URL } from "../constants.js";
 import axios from "axios";
 
+let nextId = 0;
 const NewBook = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -14,47 +15,47 @@ const NewBook = () => {
   const [condition, setCondition] = useState("");
   const [review, setReview] = useState("");
   const [photoArr, setPhotoArr] = useState([]);
-
-  // const [clickedPhotoId, setClickedPhotoId] = useState("");
-
   const navigate = useNavigate();
 
-  const handleFileChange = (e) => {
-    const imageName = e.target.files[0].name;
+  let indexCount = 0;
 
-    setPhotoArr((photoArr) => [...photoArr, { photoUrl: imageName }]);
+  const handleFileChange = (e) => {
+    indexCount = indexCount + 1;
+    const imageFile = e.target.files[0];
+    const convertedImageUrl = URL.createObjectURL(imageFile);
+    setPhotoArr((photoArr) => [
+      ...photoArr,
+      { photoUrl: convertedImageUrl, index: (nextId += 1) },
+    ]);
   };
 
-  // use a function
-  // useEffect(() => {
-  //   if (clickedPhotoId !== null) {
-  //     const newPhotoArr = [...photoArr];
-  //     newPhotoArr.splice(clickedPhotoId, 1);
-  //     setPhotoArr(newPhotoArr);
-  //   }
-  // }, [clickedPhotoId]);
-
-  const photos = photoArr.length
-    ? photoArr.map((image, index) => {
-        return (
-          <>
-            <div
-              className="border border-dashed overflow-hidden relative"
-              key={index}
+  const photos = photoArr.map((image) => {
+    return (
+      <>
+        <div
+          className="border border-dashed overflow-hidden relative"
+          key={image.index}
+        >
+          <img
+            className="object-cover h-20 w-24"
+            src={image.photoUrl}
+            alt="book_cover"
+          />
+          <div className="absolute top-0 border ml-2 text-secondary-200 font-bold">
+            <button
+              onClick={() => {
+                setPhotoArr(
+                  photoArr.filter((item) => item.index !== image.index)
+                );
+              }}
             >
-              <img
-                className="object-cover h-20 w-24"
-                src={image.photoUrl}
-                alt="book_cover"
-              />
-              <div className="absolute top-0 border ml-2 text-secondary-200 font-bold">
-                {/* <button onClick={() => setClickedPhotoId(index)}>X</button> */}
-              </div>
-            </div>
-          </>
-        );
-      })
-    : null;
+              X
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,9 +69,8 @@ const NewBook = () => {
       review: review,
       photoUrl: photoArr,
     };
-
     const res = await axios.post(`${BACKEND_URL}/books`, obj);
-    navigate("/home-sample");
+    navigate(`/listed_books/${obj.title}`);
     return res;
   };
 
@@ -80,37 +80,43 @@ const NewBook = () => {
         <div className="col-start-2">
           <button onClick={() => navigate(-1)}>Back</button>
         </div>
-        <div className="col-start-2 col-span-2 p-5 border">
+        <div className="col-start-2 col-span-2 p-5 border rounded-2xl">
           <form className=" space-y-12">
             <div>
               <TextInput
                 label="Book title"
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
+                placeholder="Grumpy Monkey"
               />
               <TextInput
                 label="Author"
                 type="text"
                 onChange={(e) => setAuthor(e.target.value)}
+                placeholder="Suzanne Lang"
               />
               <TextArea
                 label="Description"
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}
+                placeholder="Could it be that he just needs a day to feel grumpy?"
               />
               <TextInput
                 label="Released Year"
                 type="number"
                 onChange={(e) => setReleasedYear(e.target.value)}
+                placeholder="2018"
               />
               <TextInput
                 label="Condition"
                 type="text"
                 onChange={(e) => setCondition(e.target.value)}
+                placeholder="New"
               />
               <TextArea
                 label="Review"
                 onChange={(e) => setReview(e.target.value)}
+                placeholder="Best book so far!"
               />
             </div>
 
