@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import Select from "react-select";
 import axios from "axios";
+const sortOption = [
+  { label: "Category", value: "name" },
+  { label: "Popular", value: "popularSection" },
+  { label: "Newest Post", value: "newestPost" },
+  { label: "Newest Comment", value: "newestComment" },
+];
 
 export default function ForumMainPage() {
   const [errorMessage, setErrorMessage] = useOutletContext();
@@ -22,19 +28,26 @@ export default function ForumMainPage() {
   }, [setErrorMessage, sort]);
 
   return (
-    <div>
-      {/* <Select
-        options={["name","popularSection","newestPost","newestComment"]}
-        isMulti
-        styles={{
-          control: (baseStyle) => ({
-            ...baseStyle,
-            background: "oklch(var(--b1))",
-            border: "2px solid oklch(var(--b3))",
-          }),
-        }}
-        onChange={(e) => setChoosenCategories(e)}
-      /> */}
+    <div className="w-5/6">
+      <div className="flex items-center py-5 space-x-5">
+        <b className="text-2xl">Section:</b>
+      </div>
+      <div className="flex items-center space-x-5">
+        <span className="text-xl">Sorted By:</span>
+        <Select
+          className="w-56"
+          defaultValue={{ label: "Category", value: "name" }}
+          options={sortOption}
+          onChange={(e) => setSort(e.value)}
+          styles={{
+            control: (baseStyle) => ({
+              ...baseStyle,
+              background: "oklch(var(--b1))",
+              border: "2px solid oklch(var(--b3))",
+            }),
+          }}
+        />
+      </div>
     </div>
   );
 }

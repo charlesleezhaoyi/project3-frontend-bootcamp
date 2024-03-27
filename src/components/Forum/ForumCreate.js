@@ -79,18 +79,22 @@ export default function ForumCreate({ type }) {
         </div>
         <div className="flex flex-col w-5/6  space-y-3">
           <label className="text-xl self-start">Genres:</label>
-          <Select
-            options={categoryOptions}
-            isMulti
-            styles={{
-              control: (baseStyle) => ({
-                ...baseStyle,
-                background: "oklch(var(--b1))",
-                border: "2px solid oklch(var(--b3))",
-              }),
-            }}
-            onChange={(e) => setChoosenCategories(e)}
-          />
+          {!!categoryOptions.length ? (
+            <Select
+              options={categoryOptions}
+              isMulti
+              styles={{
+                control: (baseStyle) => ({
+                  ...baseStyle,
+                  background: "oklch(var(--b1))",
+                  border: "2px solid oklch(var(--b3))",
+                }),
+              }}
+              onChange={(e) => setChoosenCategories(e)}
+            />
+          ) : (
+            <div className="skeleton w-80 h-10"></div>
+          )}
         </div>
         <div className="flex flex-col w-5/6  space-y-3">
           <label className="text-xl self-start">Content:</label>
