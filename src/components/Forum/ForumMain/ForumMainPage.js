@@ -2,30 +2,44 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import Select from "react-select";
 import axios from "axios";
+import SectionColumn from "./SectionColumn";
 const sortOption = [
   { label: "Category", value: "name" },
-  { label: "Popular", value: "popularSection" },
+  { label: "Popular Section", value: "popularSection" },
   { label: "Newest Post", value: "newestPost" },
   { label: "Newest Comment", value: "newestComment" },
 ];
 
 export default function ForumMainPage() {
-  const [errorMessage, setErrorMessage] = useOutletContext();
-  const [categoryListWithPost, setCategoriesListPost] = useState();
+  const [, setErrorMessage] = useOutletContext();
+  const [categoryList, setCategoryList] = useState([]);
   const [sort, setSort] = useState("name");
   useEffect(() => {
-    const getCategoryListWithPost = async () => {
+    const getCategoryList = async () => {
       try {
-        const categoryListRes = await axios.get(
+        const { data } = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/categories/all/sort/${sort}`
         );
-        console.log(categoryListRes.data);
+        setCategoryList(data);
       } catch (error) {
         setErrorMessage(error.message);
       }
     };
-    getCategoryListWithPost();
+    getCategoryList();
   }, [setErrorMessage, sort]);
+
+  const sectionList = !!categoryList.length ? (
+    categoryList.map((category) => (
+      <SectionColumn
+        category={category}
+        sort={sort}
+        setErrorMessage={setErrorMessage}
+        key={category.id}
+      />
+    ))
+  ) : (
+    <span className="loading loading-dots loading-lg"></span>
+  );
 
   return (
     <div className="w-5/6">
@@ -48,6 +62,7 @@ export default function ForumMainPage() {
           }}
         />
       </div>
+      <div className="py-5 space-y-5">{sectionList}</div>
     </div>
   );
 }
