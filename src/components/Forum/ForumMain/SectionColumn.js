@@ -1,6 +1,6 @@
 import axios from "axios";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function SectionColumn({ category, sort, setErrorMessage }) {
@@ -25,30 +25,28 @@ export default function SectionColumn({ category, sort, setErrorMessage }) {
     getPostData();
   }, [setErrorMessage, sort, category.name]);
 
-  const postDataDisplay = useMemo(() => {
-    if (!postData) {
-      return <div>No Post Yet.</div>;
-    }
-    const authorName = postData.author.firstName
+  const authorName =
+    postData &&
+    (postData.author.firstName
       ? `${postData.author.firstName} ${postData.author.lastName}`
-      : postData.author.email.split("@")[0];
-    const postDataDisplay = (
-      <Link
-        to={`/forum/posts/${postData.id}`}
-        className="sm:h-12 items-center flex justify-between btn px-2 flex-nowrap"
-      >
-        <b className="truncate w-1/2 sm:w-2/3 text-left">{postData.title}</b>
-        <div className="sm:w-1/3 w-1/2 2xl flex items-center justify-between">
-          {authorName}
-          <div className="flex items-center">
-            {postData.likeCount}
-            <FavoriteBorderOutlinedIcon />
-          </div>
+      : postData.author.email.split("@")[0]);
+  const postDataDisplay = postData ? (
+    <Link
+      to={`/forum/posts/${postData.id}`}
+      className="sm:h-12 items-center flex justify-between btn px-2 flex-nowrap"
+    >
+      <b className="truncate w-1/2 sm:w-2/3 text-left">{postData.title}</b>
+      <div className="sm:w-1/3 w-1/2 2xl flex items-center justify-between">
+        {authorName}
+        <div className="flex items-center">
+          {postData.likeCount}
+          <FavoriteBorderOutlinedIcon />
         </div>
-      </Link>
-    );
-    return postDataDisplay;
-  }, [postData]);
+      </div>
+    </Link>
+  ) : (
+    <div>No Post Yet.</div>
+  );
 
   return (
     <div className="flex flex-col border-2 border-neutral rounded-md">
