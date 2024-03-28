@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import Select from "react-select";
 import axios from "axios";
@@ -14,6 +14,7 @@ export default function ForumMainPage() {
   const [, setErrorMessage] = useOutletContext();
   const [categoryList, setCategoryList] = useState([]);
   const [sort, setSort] = useState("name");
+
   useEffect(() => {
     const getCategoryList = async () => {
       try {
@@ -28,18 +29,20 @@ export default function ForumMainPage() {
     getCategoryList();
   }, [setErrorMessage, sort]);
 
-  const sectionList = !!categoryList.length ? (
-    categoryList.map((category) => (
+  const sectionList = useMemo(() => {
+    if (!categoryList.length) {
+      return <span className="loading loading-dots loading-lg"></span>;
+    }
+    const sectionList = categoryList.map((category) => (
       <SectionColumn
         category={category}
         sort={sort}
         setErrorMessage={setErrorMessage}
         key={category.id}
       />
-    ))
-  ) : (
-    <span className="loading loading-dots loading-lg"></span>
-  );
+    ));
+    return sectionList;
+  }, [categoryList, setErrorMessage, sort]);
 
   return (
     <div className="w-5/6">

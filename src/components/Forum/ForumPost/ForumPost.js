@@ -1,8 +1,13 @@
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -59,18 +64,25 @@ export default function ForumPost() {
     }
   };
 
-  const [authorName, createdAt] = useMemo(() => {
-    if (!postData) {
-      return [null, null];
-    }
-    const authorName =
-      postData &&
-      (postData.author.firstName
-        ? `${postData.author.firstName} ${postData.author.lastName}`
-        : postData.author.email.split("@")[0]);
-    const createdAt = postData && new Date(postData.createdAt);
-    return [authorName, createdAt];
-  }, [postData]);
+  const authorName =
+    postData &&
+    (postData.author.firstName
+      ? `${postData.author.firstName} ${postData.author.lastName}`
+      : postData.author.email.split("@")[0]);
+
+  const createdAt = postData && new Date(postData.createdAt);
+
+  const categoryList =
+    postData &&
+    postData.categories.map((categoryData) => (
+      <Link
+        to={`/forum/categories/${categoryData.name}`}
+        className="btn btn-link"
+        key={categoryData.id}
+      >
+        {categoryData.name}
+      </Link>
+    ));
 
   const postDataDisplay = postData && (
     <div className="flex flex-col items-center">
@@ -94,13 +106,20 @@ export default function ForumPost() {
           </label>
         </div>
       </div>
-      <div className="flex justify-between w-full p-2">
+      <div className="flex justify-between w-full p-2 border-b-2 border-neutral">
         <h3>{authorName}</h3>
         <h3>
           {createdAt.toLocaleString("en-GB", {
             timeZone: "UTC",
           })}
         </h3>
+      </div>
+      <div className="p-3">
+        <p className="text-left text-sm">{postData.content}</p>
+        <div className="flex items-center">
+          <span className="text-primary">Tag:</span>
+          {categoryList}
+        </div>
       </div>
     </div>
   );
