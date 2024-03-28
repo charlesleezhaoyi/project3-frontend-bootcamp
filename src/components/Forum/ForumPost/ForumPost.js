@@ -10,6 +10,8 @@ import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import ForumComment from "./ForumComment";
+import ForumNameAndDate from "./ForumNameAndDate";
 
 export default function ForumPost() {
   const [postData, setPostData] = useState(null);
@@ -64,14 +66,6 @@ export default function ForumPost() {
     }
   };
 
-  const authorName =
-    postData &&
-    (postData.author.firstName
-      ? `${postData.author.firstName} ${postData.author.lastName}`
-      : postData.author.email.split("@")[0]);
-
-  const createdAt = postData && new Date(postData.createdAt);
-
   const categoryList =
     postData &&
     postData.categories.map((categoryData) => (
@@ -83,6 +77,12 @@ export default function ForumPost() {
         {categoryData.name}
       </Link>
     ));
+
+  const commentsListDisplay =
+    postData &&
+    postData.comments.map((comment, i) => {
+      return <ForumComment comment={comment} key={i} />;
+    });
 
   const postDataDisplay = postData && (
     <div className="flex flex-col items-center">
@@ -106,21 +106,15 @@ export default function ForumPost() {
           </label>
         </div>
       </div>
-      <div className="flex justify-between w-full p-2 border-b-2 border-neutral">
-        <h3>{authorName}</h3>
-        <h3>
-          {createdAt.toLocaleString("en-GB", {
-            timeZone: "UTC",
-          })}
-        </h3>
-      </div>
-      <div className="p-3">
+      <ForumNameAndDate user={postData.author} date={postData.createdAt} />
+      <div className="p-3 border-b-2 border-neutral last:border-0">
         <p className="text-left text-sm">{postData.content}</p>
         <div className="flex items-center">
           <span className="text-primary">Tag:</span>
           {categoryList}
         </div>
       </div>
+      {commentsListDisplay}
     </div>
   );
 
