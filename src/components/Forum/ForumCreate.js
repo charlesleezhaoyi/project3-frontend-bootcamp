@@ -38,10 +38,13 @@ export default function ForumCreate({ type }) {
   const handleSubmit = async () => {
     try {
       if (!titleInput.length) {
-        throw new Error("Title cannot be empty");
+        throw new Error("Title cannot be empty.");
       }
       if (!contentInput.length) {
-        throw new Error("Content cannot be empty");
+        throw new Error("Content cannot be empty.");
+      }
+      if (!choosenCategories.length) {
+        throw new Error("Must have at least one category.");
       }
       const categories = choosenCategories.map((option) => option.value);
       const postData = {
@@ -61,7 +64,7 @@ export default function ForumCreate({ type }) {
   };
 
   return (
-    <div>
+    <div className="w-5/6 sm:w-1/2">
       <div className="flex items-center py-5 space-x-5">
         <button className="btn btn-ghost" onClick={() => navigate(-1)}>
           <ArrowBackOutlinedIcon fontSize="large" />
