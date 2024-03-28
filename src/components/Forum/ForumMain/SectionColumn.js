@@ -39,9 +39,9 @@ export default function SectionColumn({ category, sort, setErrorMessage }) {
       {postData ? (
         <Link
           to={`/forum/posts/${postData.id}`}
-          className="sm:h-12 items-center flex justify-between btn"
+          className="sm:h-12 items-center flex justify-between btn px-2 flex-nowrap"
         >
-          <b className="pl-2">{postData.title}</b>
+          <b className="truncate">{postData.title}</b>
           <div className="sm:w-1/3 w-1/2 2xl flex items-center justify-between">
             {authorName}
             <div className="flex items-center">
