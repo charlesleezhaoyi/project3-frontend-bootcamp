@@ -2,7 +2,7 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -59,9 +59,22 @@ export default function ForumPost() {
     }
   };
 
+  const [authorName, createdAt] = useMemo(() => {
+    if (!postData) {
+      return [null, null];
+    }
+    const authorName =
+      postData &&
+      (postData.author.firstName
+        ? `${postData.author.firstName} ${postData.author.lastName}`
+        : postData.author.email.split("@")[0]);
+    const createdAt = postData && new Date(postData.createdAt);
+    return [authorName, createdAt];
+  }, [postData]);
+
   const postDataDisplay = postData && (
     <div className="flex flex-col items-center">
-      <div className="flex justify-bewteen w-full p-2">
+      <div className="flex justify-between w-full p-2 border-b-2 border-neutral">
         <b className="text-2xl text-left grow">{postData.title}</b>
         <div className="flex items-center">
           {postData.likes.length}
@@ -81,8 +94,17 @@ export default function ForumPost() {
           </label>
         </div>
       </div>
+      <div className="flex justify-between w-full p-2">
+        <h3>{authorName}</h3>
+        <h3>
+          {createdAt.toLocaleString("en-GB", {
+            timeZone: "UTC",
+          })}
+        </h3>
+      </div>
     </div>
   );
+
   return (
     <div className="w-5/6 flex flex-col">
       <button
