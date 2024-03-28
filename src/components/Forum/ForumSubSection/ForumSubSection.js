@@ -31,11 +31,15 @@ export default function ForumSubSection() {
     getPostList();
   }, [setErrorMessage, sort, category]);
 
-  const postListItems = postList ? (
+  let postListItems = postList ? (
     postList.map((post) => <ForumPostListItem post={post} key={post.id} />)
   ) : (
     <span className="loading loading-dots loading-lg"></span>
   );
+  if (!!postList && postList.length === 0) {
+    postListItems = <div>No post yet.</div>;
+  }
+
   return (
     <div className="w-5/6">
       <div className="flex items-center py-5">

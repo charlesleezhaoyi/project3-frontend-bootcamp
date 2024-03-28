@@ -41,7 +41,7 @@ export default function SectionColumn({ category, sort, setErrorMessage }) {
           to={`/forum/posts/${postData.id}`}
           className="sm:h-12 items-center flex justify-between btn px-2 flex-nowrap"
         >
-          <b className="truncate">{postData.title}</b>
+          <b className="truncate w-1/2 sm:w-2/3 text-left">{postData.title}</b>
           <div className="sm:w-1/3 w-1/2 2xl flex items-center justify-between">
             {authorName}
             <div className="flex items-center">
