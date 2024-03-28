@@ -42,7 +42,7 @@ export default function SectionColumn({ category, sort, setErrorMessage }) {
           className="sm:h-12 items-center flex justify-between btn"
         >
           <b className="pl-2">{postData.title}</b>
-          <div className="w-1/2 2xl flex items-center justify-between">
+          <div className="sm:w-1/3 w-1/2 2xl flex items-center justify-between">
             {authorName}
             <div className="flex items-center">
               {postData.likeCount}

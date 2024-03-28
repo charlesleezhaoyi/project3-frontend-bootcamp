@@ -55,10 +55,7 @@ root.render(
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
             <Route path="create/post" element={<ForumCreate type="post" />} />
-            <Route
-              path="categories/:categoryName"
-              element={<ForumSubSection />}
-            />
+            <Route path="categories/:category" element={<ForumSubSection />} />
             <Route path="posts/:postId" element={<ForumPost />} />
           </Route>
           {/* <Route path="*" element={"Nothing here!"} /> */}

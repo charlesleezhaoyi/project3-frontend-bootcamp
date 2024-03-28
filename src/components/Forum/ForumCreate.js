@@ -68,7 +68,7 @@ export default function ForumCreate({ type }) {
         </button>
         <b className="text-2xl">Create {type}:</b>
       </div>
-      <div className="artboard phone-2 border-2 border-neutral rounded-xl flex flex-col justify-around items-center mb-5">
+      <div className="border-2 border-neutral rounded-xl flex flex-col space-y-5 items-center pb-5 m-5">
         <div className="space-x-3 flex items-center w-5/6 pt-3">
           <label className="text-xl">Title:</label>
           <input
