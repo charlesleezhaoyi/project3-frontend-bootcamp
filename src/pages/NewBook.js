@@ -2,9 +2,15 @@ import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import { TextArea, TextInput, FileInput } from "../components/Common/Input";
+import {
+  TextArea,
+  TextInput,
+  FileInput,
+  SelectInput,
+} from "../components/Common/Input";
 import { BACKEND_URL } from "../constants.js";
 import axios from "axios";
+import useLoadCategories from "../hooks.js/useLoadCategories.js";
 
 let nextId = 0;
 const NewBook = () => {
@@ -15,9 +21,15 @@ const NewBook = () => {
   const [condition, setCondition] = useState("");
   const [review, setReview] = useState("");
   const [photoArr, setPhotoArr] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const { categories } = useLoadCategories();
   const navigate = useNavigate();
 
   let indexCount = 0;
+
+  const handleChange = (selectedItem) => {
+    setSelectedCategories(selectedItem);
+  };
 
   const handleFileChange = (e) => {
     indexCount = indexCount + 1;
@@ -60,6 +72,12 @@ const NewBook = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const categoryArr = [];
+    selectedCategories.forEach((item) => {
+      const categoryName = item.label;
+      return categoryArr.push(categoryName);
+    });
+
     const obj = {
       title: title,
       author: author,
@@ -68,9 +86,13 @@ const NewBook = () => {
       condition: condition,
       review: review,
       photoUrl: photoArr,
+      name: categoryArr,
     };
+
     const res = await axios.post(`${BACKEND_URL}/books`, obj);
-    navigate(`/listed_books/${obj.title}`);
+    const bookId = res.data.id;
+    const bookTitle = res.data.title;
+    navigate(`/listed_books/${bookId}/${bookTitle}`);
     return res;
   };
 
@@ -100,6 +122,11 @@ const NewBook = () => {
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Could it be that he just needs a day to feel grumpy?"
+              />
+              <SelectInput
+                value={categories}
+                onChange={handleChange}
+                selectedCategories={selectedCategories}
               />
               <TextInput
                 label="Released Year"

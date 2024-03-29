@@ -11,6 +11,7 @@ const Home = () => {
     <div>
       <NavBar />
       <SearchBar onSearch={(term) => console.log(term)} />
+
       <CategoryList />
       <BookList />
       {/* <LoginButton />
