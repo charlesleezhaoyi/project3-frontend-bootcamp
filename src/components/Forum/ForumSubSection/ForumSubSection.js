@@ -36,6 +36,7 @@ export default function ForumSubSection() {
   ) : (
     <span className="loading loading-dots loading-lg"></span>
   );
+
   if (!!postList && postList.length === 0) {
     postListItems = <div>No post yet.</div>;
   }

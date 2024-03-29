@@ -3,21 +3,25 @@ import {
   useNavigate,
   useOutletContext,
   useParams,
+  useSearchParams,
 } from "react-router-dom";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import ForumComment from "./ForumComment";
 import ForumNameAndDate from "./ForumNameAndDate";
+import ForumCreateComment from "./ForumCreateComment";
 
 export default function ForumPost() {
   const [postData, setPostData] = useState(null);
+  const [commentList, setCommentList] = useState(null);
   const [isUserLiked, setIsUserLiked] = useState(false);
   const [, setErrorMessage] = useOutletContext();
   const navigate = useNavigate();
+  const [query] = useSearchParams();
   const { postId } = useParams();
   const { user } = useAuth0();
 
@@ -31,7 +35,9 @@ export default function ForumPost() {
         const { data } = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/posts/${postId}`
         );
-        setPostData(data);
+        const { comments, ...incomingPostData } = data;
+        setCommentList(comments);
+        setPostData(incomingPostData);
       } catch (error) {
         setErrorMessage(error.message);
       }
@@ -78,11 +84,14 @@ export default function ForumPost() {
       </Link>
     ));
 
-  const commentsListDisplay =
-    postData &&
-    postData.comments.map((comment, i) => {
+  const commentsListDisplay = useMemo(() => {
+    if (!commentList) {
+      return null;
+    }
+    return commentList.map((comment, i) => {
       return <ForumComment comment={comment} key={i} />;
     });
+  }, [commentList]);
 
   const postDataDisplay = postData && (
     <div className="flex flex-col items-center">
@@ -107,9 +116,9 @@ export default function ForumPost() {
         </div>
       </div>
       <ForumNameAndDate user={postData.author} date={postData.createdAt} />
-      <div className="p-3 border-b-2 border-neutral last:border-0">
+      <div className="w-full p-3 border-b-2 border-neutral last:border-0">
         <p className="text-left text-sm">{postData.content}</p>
-        <div className="flex items-center">
+        <div className="flex items-center flex-wrap">
           <span className="text-primary">Tag:</span>
           {categoryList}
         </div>
@@ -122,18 +131,24 @@ export default function ForumPost() {
     <div className="w-5/6 flex flex-col">
       <button
         className="btn btn-ghost self-start my-2"
-        onClick={() => navigate(-1)}
+        onClick={() => {
+          navigate(query.has("isNewPost") ? "/forum" : -1);
+        }}
       >
-        {/*Need to add conditional path for user just created a post*/}
         <ArrowBackOutlinedIcon fontSize="large" />
       </button>
-      <div className="w-full border-2 border-neutral rounded-md">
+      <div className="w-full border-2 border-neutral rounded-md mb-20">
         {postData ? (
           postDataDisplay
         ) : (
           <span className="loading loading-dots loading-lg"></span>
         )}
       </div>
+      <ForumCreateComment
+        postId={postId}
+        setErrorMessage={setErrorMessage}
+        setCommentList={setCommentList}
+      />
     </div>
   );
 }

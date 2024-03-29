@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function ForumNavBar() {
   return (
-    <div className="navbar border-b-2 border-primary py-6">
+    <div className="navbar border-b-2 border-primary py-6 sticky top-0 z-50 bg-base-100">
       <div className="navbar-start space-x-3">
         <Link to="/home" className="btn btn-ghost">
           <HomeOutlinedIcon fontSize="large" />

@@ -8,7 +8,7 @@ import App from "./App";
 import AuthWrapper from "./components/AuthWrapper";
 import Forum from "./components/Forum/Forum";
 import ForumMainPage from "./components/Forum/ForumMain/ForumMainPage";
-import ForumCreate from "./components/Forum/ForumCreate";
+import ForumCreatePost from "./components/Forum/ForumCreatePost";
 import Onboarding from "./components/Onboarding/OnboardingForm";
 import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection";
 import ForumPost from "./components/Forum/ForumPost/ForumPost";
@@ -54,7 +54,7 @@ root.render(
           />
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
-            <Route path="create/post" element={<ForumCreate type="post" />} />
+            <Route path="create/post" element={<ForumCreatePost />} />
             <Route path="categories/:category" element={<ForumSubSection />} />
             <Route path="posts/:postId" element={<ForumPost />} />
           </Route>

@@ -4,7 +4,8 @@ import axios from "axios";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import Select from "react-select";
 import { useAuth0 } from "@auth0/auth0-react";
-export default function ForumCreate({ type }) {
+
+export default function ForumCreatePost() {
   const [, setErrorMessage] = useOutletContext();
   const navigate = useNavigate();
   const { user } = useAuth0();
@@ -28,23 +29,19 @@ export default function ForumCreate({ type }) {
         setErrorMessage(error.message);
       }
     };
-    if (type === "post") {
-      getCategoriesOption();
-    } else {
-      setErrorMessage("Wrong Type for create form.");
-    }
-  }, [type, setErrorMessage]);
+    getCategoriesOption();
+  }, [setErrorMessage]);
 
   const handleSubmit = async () => {
     try {
       if (!titleInput.length) {
-        throw new Error("Title cannot be empty.");
+        throw new Error("Title cannot be empty");
       }
       if (!contentInput.length) {
-        throw new Error("Content cannot be empty.");
+        throw new Error("Content cannot be empty");
       }
       if (!choosenCategories.length) {
-        throw new Error("Must have at least one category.");
+        throw new Error("Must have at least one category");
       }
       const categories = choosenCategories.map((option) => option.value);
       const postData = {
@@ -57,7 +54,7 @@ export default function ForumCreate({ type }) {
         `${process.env.REACT_APP_BACKEND_URL}/posts`,
         postData
       );
-      navigate(`/forum/posts/${newPostRes.data.id}`);
+      navigate(`/forum/posts/${newPostRes.data.id}?isNewPost=true`);
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -69,7 +66,7 @@ export default function ForumCreate({ type }) {
         <button className="btn btn-ghost" onClick={() => navigate(-1)}>
           <ArrowBackOutlinedIcon fontSize="large" />
         </button>
-        <b className="text-2xl">Create {type}:</b>
+        <b className="text-2xl">Create Post:</b>
       </div>
       <div className="border-2 border-neutral rounded-xl flex flex-col space-y-5 items-center pb-5 m-5">
         <div className="space-x-3 flex items-center w-5/6 pt-3">
@@ -102,7 +99,7 @@ export default function ForumCreate({ type }) {
         <div className="flex flex-col w-5/6  space-y-3">
           <label className="text-xl self-start">Content:</label>
           <textarea
-            className="textarea textarea-bordered h-96"
+            className="textarea textarea-bordered h-60"
             value={contentInput}
             onChange={(e) => setContentInput(e.target.value)}
           />
