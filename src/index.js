@@ -1,18 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
+
 import { Auth0Provider } from "@auth0/auth0-react";
 import "./index.css";
+
 import App from "./App";
-import AuthWrapper from "./components/AuthWrapper";
+import Home from "./pages/Home";
+// import AuthWrapper from "./components/AuthWrapper";
 import Forum from "./components/Forum/Forum";
 import ForumMainPage from "./components/Forum/ForumMain/ForumMainPage";
 import ForumCreatePost from "./components/Forum/ForumCreatePost";
-import Onboarding from "./components/Onboarding/OnboardingForm";
-import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection";
+import Onboarding from "./pages/OnboardingForm";
+// import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection";
 import ForumPost from "./components/Forum/ForumPost/ForumPost";
-
+import NewBook from "./pages/NewBook";
+import SingleBook from "./pages/SingleBook";
+// import BookList from "./components/Dashboard/BookList";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -32,34 +36,29 @@ root.render(
             index
             path="/home"
             element={
-              <AuthWrapper>
-                <Home />
-              </AuthWrapper>
+              // <AuthWrapper>
+              <Home />
+              // </AuthWrapper> */}
             }
           />
-
           <Route
             path="/onboarding"
             element={
-              <AuthWrapper>
-                <Onboarding />
-              </AuthWrapper>
+              // <AuthWrapper>
+              <Onboarding />
+              // </AuthWrapper>
             }
           ></Route>
-          <Route
-            path=""
-            element={
-              <div>We are just expecting this root page to be blank????</div>
-            }
-          />
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
             <Route path="create/post" element={<ForumCreatePost />} />
-            <Route path="categories/:category" element={<ForumSubSection />} />
+            {/* <Route path="categories/:category" element={<ForumSubSection />} /> */}
             <Route path="posts/:postId" element={<ForumPost />} />
           </Route>
           {/* <Route path="*" element={"Nothing here!"} /> */}
         </Route>
+        <Route path="/create-newbook" element={<NewBook />} />
+        <Route path="/books/:id" element={<SingleBook />} />
       </Routes>
     </BrowserRouter>
   </Auth0Provider>

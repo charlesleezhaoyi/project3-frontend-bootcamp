@@ -1,13 +1,19 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect, useState } from "react";
-import CategoryRanking from "../Common/CategoryRanking";
+
+// import ErrorAlert from "../Common/ErrorAlert";
+// import Loading from "../Common/Loading";
+// import CategoryRanking from "../Common/CategoryRanking";
 import axios from "axios";
+import { BACKEND_URL } from "../constants";
 
 const Onboarding = () => {
-  const navigate = useNavigate();
+  // const { isAuthenticated, isLoading, user } = useAuth0();
   const { isAuthenticated, user } = useAuth0();
-  const [errorAlert] = useState(false);
+  const navigate = useNavigate();
+
+  // const [errorAlert, setErrorAlert] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -26,7 +32,6 @@ const Onboarding = () => {
     e.preventDefault();
     console.log("button clicked");
     console.log(isAuthenticated, user.email_verified);
-
     // The isAuthenticated check and the rest of the logic should be inside this function.
     if (isAuthenticated) {
       // if (!user.email_verified) {
@@ -36,7 +41,6 @@ const Onboarding = () => {
       //   // Add a return statement here to stop execution if the email is not verified.
       //   //return;
       // }
-
       try {
         // Make sure to await the axios call
         await axios.put("http://localhost:3000/users/", {
@@ -202,7 +206,7 @@ const Onboarding = () => {
             <h2 className="text-base font-semibold leading-7 text-gray-900">
               Book Preferences
             </h2>
-            <CategoryRanking />
+            {/* <CategoryRanking /> */}
           </div>
           <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -327,7 +331,7 @@ const Onboarding = () => {
           >
             Cancel
           </button>
-          {errorAlert}
+          {/* {errorAlert} */}
           <button
             type="submit"
             className="sticky rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
