@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { Outlet } from "react-router-dom";
+import ErrorPopUp from "./components/Common/ErrorPopUp";
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="App">
-        <Outlet />
-        Hello World
-      </div>
-    );
-  }
+function App() {
+  const [errorMessage, setErrorMessage] = useState("");
+  return (
+    <div className="App">
+      <Outlet context={[errorMessage, setErrorMessage]} />
+      <ErrorPopUp
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
+    </div>
+  );
 }
 
 export default App;

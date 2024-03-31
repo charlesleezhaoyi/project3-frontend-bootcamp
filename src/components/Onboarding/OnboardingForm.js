@@ -1,15 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import ErrorAlert from "../Common/ErrorAlert";
-import Loading from "../Common/Loading";
 import CategoryRanking from "../Common/CategoryRanking";
 import axios from "axios";
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading, user } = useAuth0();
-  const [errorAlert, setErrorAlert] = useState(false);
+  const { isAuthenticated, user } = useAuth0();
+  const [errorAlert] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",

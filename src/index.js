@@ -7,10 +7,11 @@ import "./index.css";
 import App from "./App";
 import AuthWrapper from "./components/AuthWrapper";
 import Forum from "./components/Forum/Forum";
-import ForumMainPage from "./components/Forum/ForumMainPage";
-import ForumCreate from "./components/Forum/ForumCreate";
+import ForumMainPage from "./components/Forum/ForumMain/ForumMainPage";
+import ForumCreatePost from "./components/Forum/ForumCreatePost";
 import Onboarding from "./components/Onboarding/OnboardingForm";
-import { OnDeviceTraining } from "@mui/icons-material";
+import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection";
+import ForumPost from "./components/Forum/ForumPost/ForumPost";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -36,6 +37,7 @@ root.render(
               </AuthWrapper>
             }
           />
+
           <Route
             path="/onboarding"
             element={
@@ -44,9 +46,17 @@ root.render(
               </AuthWrapper>
             }
           ></Route>
+          <Route
+            path=""
+            element={
+              <div>We are just expecting this root page to be blank????</div>
+            }
+          />
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
-            <Route path="create" element={<ForumCreate />} />
+            <Route path="create/post" element={<ForumCreatePost />} />
+            <Route path="categories/:category" element={<ForumSubSection />} />
+            <Route path="posts/:postId" element={<ForumPost />} />
           </Route>
           {/* <Route path="*" element={"Nothing here!"} /> */}
         </Route>
