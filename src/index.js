@@ -9,10 +9,11 @@ import App from "./App";
 import Home from "./pages/Home";
 // import AuthWrapper from "./components/AuthWrapper";
 import Forum from "./components/Forum/Forum";
-import ForumMainPage from "./components/Forum/ForumMainPage";
-import ForumCreate from "./components/Forum/ForumCreate";
+import ForumMainPage from "./components/Forum/ForumMain/ForumMainPage";
+import ForumCreatePost from "./components/Forum/ForumCreatePost";
 import Onboarding from "./pages/OnboardingForm";
-// import { OnDeviceTraining } from "@mui/icons-material";
+// import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection";
+import ForumPost from "./components/Forum/ForumPost/ForumPost";
 import NewBook from "./pages/NewBook";
 import SingleBook from "./pages/SingleBook";
 import BookList from "./components/Dashboard/BookList";
@@ -39,7 +40,7 @@ root.render(
               <Home />
               // </AuthWrapper> */}
             }
-          ></Route>
+          />
           <Route
             path="/onboarding"
             element={
@@ -47,11 +48,12 @@ root.render(
               <Onboarding />
               // </AuthWrapper>
             }
-          />
-
+          ></Route>
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
-            <Route path="create" element={<ForumCreate />} />
+            <Route path="create/post" element={<ForumCreatePost />} />
+            <Route path="categories/:category" element={<ForumSubSection />} />
+            <Route path="posts/:postId" element={<ForumPost />} />
           </Route>
           {/* <Route path="*" element={"Nothing here!"} /> */}
         </Route>

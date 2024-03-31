@@ -1,17 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useState } from "react";
-// import ErrorAlert from "../components/Common/ErrorAlert";
-// import Loading from "../components/Common/Loading";
-import CategoryRanking from "../components/Common/CategoryRanking";
-import { BACKEND_URL } from "../constants.js";
+import { useEffect, useState } from "react";
+import ErrorAlert from "../Common/ErrorAlert";
+import Loading from "../Common/Loading";
+import CategoryRanking from "../Common/CategoryRanking";
 import axios from "axios";
 
 const Onboarding = () => {
-  // const { isAuthenticated, isLoading, user } = useAuth0();
-  const { user } = useAuth0();
-  const { email } = user;
-  // const [errorAlert, setErrorAlert] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading, user } = useAuth0();
+  const [errorAlert, setErrorAlert] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -24,36 +23,52 @@ const Onboarding = () => {
     },
     pushNotifications: "",
   });
-  const navigate = useNavigate();
+
+  const handleSaveBtnClick = async (e) => {
+    e.preventDefault();
+    console.log("button clicked");
+    console.log(isAuthenticated, user.email_verified);
+
+    // The isAuthenticated check and the rest of the logic should be inside this function.
+    if (isAuthenticated) {
+      // if (!user.email_verified) {
+      //   setErrorAlert(
+      //     <ErrorAlert message="Please verify your email address." />
+      //   );
+      //   // Add a return statement here to stop execution if the email is not verified.
+      //   //return;
+      // }
+
+      try {
+        // Make sure to await the axios call
+        await axios.put("http://localhost:3000/users/", {
+          userEmail: user.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone,
+        });
+        navigate("/home"); // Navigate after successful update
+      } catch (error) {
+        console.error("Error saving user data:", error);
+        // Optionally, set an error state here to inform the user of the error.
+      }
+    }
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    // Update formData state based on input changes
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
   };
 
-  const handleClick = async (e) => {
-    e.preventDefault();
-
-    const { firstName, lastName, phone } = formData;
-
-    const userObj = {
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
-      phone: phone,
-    };
-
-    try {
-      await axios.post(`${BACKEND_URL}/users`, userObj);
+  useEffect(() => {
+    if (isAuthenticated && user.email_verified) {
       navigate("/home");
-    } catch (error) {
-      console.log(error);
-      console.error("Error saving user data:", error);
     }
-  };
+  }, [isAuthenticated, user, navigate]);
 
   return (
     <div className="px-4 sm:P-12 lg:px-16">
@@ -88,8 +103,8 @@ const Onboarding = () => {
                 <p className="mt-3 text-sm leading-6 text-gray-600">
                   Write a few sentences about yourself.
                 </p>
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
+                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div class="sm:col-span-3">
                     <label
                       htmlFor="first-name"
                       className="block text-sm font-medium leading-6 text-gray-900"
@@ -314,11 +329,11 @@ const Onboarding = () => {
           >
             Cancel
           </button>
-          {/* {errorAlert} */}
+          {errorAlert}
           <button
             type="submit"
             className="sticky rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            onClick={handleClick}
+            onClick={handleSaveBtnClick}
           >
             Save
           </button>

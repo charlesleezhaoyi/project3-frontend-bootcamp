@@ -8,7 +8,7 @@ const componentFiles = [
 const getAllJSFile = (currentPath) => {
   const files = fs.readdirSync(currentPath);
   for (const file of files) {
-    if (file.slice(-3) == ".js") {
+    if (file.slice(-3) === ".js") {
       componentFiles.push(currentPath + "/" + file);
     }
     if (!path.extname(file).length) {
@@ -34,4 +34,7 @@ module.exports = {
     require("@tailwindcss/aspect-ratio"),
     require("@tailwindcss/forms"),
   ],
+  daisyui: {
+    themes: ["retro"],
+  },
 };
