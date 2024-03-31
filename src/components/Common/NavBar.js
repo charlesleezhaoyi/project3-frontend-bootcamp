@@ -1,8 +1,8 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { Link } from "react-router-dom";
 import Settings from ".././ProfileSettings/Settings";
-import { useState } from "react";
 
 export default function NavBar() {
   const [slideOverOpen, setSlideOverOpen] = useState(false);

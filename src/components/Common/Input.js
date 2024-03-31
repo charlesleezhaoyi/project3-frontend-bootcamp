@@ -1,6 +1,6 @@
 import Select from "react-select";
 
-export const TextInput = ({ label, type, onChange, placeholder }) => {
+export const TextInput = ({ label, type, onChange, placeholder, value }) => {
   return (
     <>
       <label className="form-control w-full max-w-xs">
@@ -12,13 +12,14 @@ export const TextInput = ({ label, type, onChange, placeholder }) => {
           placeholder={placeholder}
           className="input input-bordered w-full max-w-xs italic"
           onChange={onChange}
+          value={value}
         />
       </label>
     </>
   );
 };
 
-export const TextArea = ({ label, onChange, placeholder }) => {
+export const TextArea = ({ label, onChange, placeholder, value }) => {
   return (
     <>
       <label className="form-control">
@@ -29,6 +30,7 @@ export const TextArea = ({ label, onChange, placeholder }) => {
           className="input input-bordered h-24 italic"
           placeholder={placeholder}
           onChange={onChange}
+          value={value}
         ></textarea>
       </label>
     </>

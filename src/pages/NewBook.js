@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
+import Button from "../components/Common/Button";
 import {
   TextArea,
   TextInput,
@@ -91,8 +91,8 @@ const NewBook = () => {
 
     const res = await axios.post(`${BACKEND_URL}/books`, obj);
     const bookId = res.data.id;
-    const bookTitle = res.data.title;
-    navigate(`/listed_books/${bookId}/${bookTitle}`);
+    // const bookTitle = res.data.title;
+    navigate(`/books/${bookId}`);
     return res;
   };
 
@@ -109,18 +109,21 @@ const NewBook = () => {
                 label="Book title"
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
+                value={title}
                 placeholder="Grumpy Monkey"
               />
               <TextInput
                 label="Author"
                 type="text"
                 onChange={(e) => setAuthor(e.target.value)}
+                value={author}
                 placeholder="Suzanne Lang"
               />
               <TextArea
                 label="Description"
                 type="text"
                 onChange={(e) => setDescription(e.target.value)}
+                value={description}
                 placeholder="Could it be that he just needs a day to feel grumpy?"
               />
               <SelectInput
@@ -132,17 +135,20 @@ const NewBook = () => {
                 label="Released Year"
                 type="number"
                 onChange={(e) => setReleasedYear(e.target.value)}
+                value={releasedYear}
                 placeholder="2018"
               />
               <TextInput
                 label="Condition"
                 type="text"
                 onChange={(e) => setCondition(e.target.value)}
+                value={condition}
                 placeholder="New"
               />
               <TextArea
                 label="Review"
                 onChange={(e) => setReview(e.target.value)}
+                value={review}
                 placeholder="Best book so far!"
               />
             </div>

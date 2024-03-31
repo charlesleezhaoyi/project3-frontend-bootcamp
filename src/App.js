@@ -5,9 +5,9 @@ import { Outlet } from "react-router-dom";
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
+      <div className="p-10 text-center text-2xl">
         <Outlet />
-        Hello World
+        Welcome to Book Donation App
       </div>
     );
   }
