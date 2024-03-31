@@ -7,7 +7,6 @@ import CategoryList from "../components/Dashboard/CategoryList";
 import SearchBar from "../components/Dashboard/SearchBar";
 import useLoadCategories from "../hooks.js/useLoadCategories.js";
 import useLoadBooks from "../hooks.js/useLoadBooks.js";
-
 import Button from "../components/Common/Button.js";
 import { useNavigate } from "react-router-dom";
 

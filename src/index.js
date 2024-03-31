@@ -16,7 +16,7 @@ import Onboarding from "./pages/OnboardingForm";
 import ForumPost from "./components/Forum/ForumPost/ForumPost";
 import NewBook from "./pages/NewBook";
 import SingleBook from "./pages/SingleBook";
-import BookList from "./components/Dashboard/BookList";
+// import BookList from "./components/Dashboard/BookList";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -52,7 +52,7 @@ root.render(
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
             <Route path="create/post" element={<ForumCreatePost />} />
-            <Route path="categories/:category" element={<ForumSubSection />} />
+            {/* <Route path="categories/:category" element={<ForumSubSection />} /> */}
             <Route path="posts/:postId" element={<ForumPost />} />
           </Route>
           {/* <Route path="*" element={"Nothing here!"} /> */}

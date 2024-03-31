@@ -91,7 +91,6 @@ const NewBook = () => {
 
     const res = await axios.post(`${BACKEND_URL}/books`, obj);
     const bookId = res.data.id;
-    // const bookTitle = res.data.title;
     navigate(`/books/${bookId}`);
     return res;
   };
