@@ -15,7 +15,7 @@ const Home = () => {
   const { books } = useLoadBooks();
   const [category, setCategory] = useState("");
   const [bookList, setBookList] = useState([]);
-  const [donor, setDonor] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {

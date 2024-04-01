@@ -10,7 +10,9 @@ import { BACKEND_URL } from "../constants";
 
 const Onboarding = () => {
   // const { isAuthenticated, isLoading, user } = useAuth0();
+
   const { isAuthenticated, user } = useAuth0();
+  const { email } = user;
   const navigate = useNavigate();
 
   // const [errorAlert, setErrorAlert] = useState(false);
@@ -30,7 +32,7 @@ const Onboarding = () => {
 
   const handleSaveBtnClick = async (e) => {
     e.preventDefault();
-    console.log("button clicked");
+
     console.log(isAuthenticated, user.email_verified);
     // The isAuthenticated check and the rest of the logic should be inside this function.
     if (isAuthenticated) {
@@ -42,13 +44,15 @@ const Onboarding = () => {
       //   //return;
       // }
       try {
-        // Make sure to await the axios call
-        await axios.put("http://localhost:3000/users/", {
-          userEmail: user.email,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phone: formData.phone,
-        });
+        const { firstName, lastName, phone } = formData;
+
+        const userObj = {
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          phone: phone,
+        };
+        await axios.put(`${BACKEND_URL}/users`, userObj);
         navigate("/home"); // Navigate after successful update
       } catch (error) {
         console.error("Error saving user data:", error);
@@ -59,7 +63,6 @@ const Onboarding = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    // Update formData state based on input changes
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
