@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BACKEND_URL } from "../constants.js";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Common/Button";
@@ -8,9 +9,10 @@ import {
   FileInput,
   SelectInput,
 } from "../components/Common/Input";
-import { BACKEND_URL } from "../constants.js";
+
 import axios from "axios";
 import useLoadCategories from "../hooks.js/useLoadCategories.js";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 let nextId = 0;
 const NewBook = () => {
@@ -35,6 +37,7 @@ const NewBook = () => {
   const handleFileChange = (e) => {
     indexCount = indexCount + 1;
     const imageFile = e.target.files[0];
+    console.log(imageFile);
     const convertedImageUrl = URL.createObjectURL(imageFile);
     setPhotoArr((photoArr) => [
       ...photoArr,
@@ -94,19 +97,21 @@ const NewBook = () => {
     const res = await axios.post(`${BACKEND_URL}/books`, obj);
     const bookId = res.data.id;
 
-    navigate(`/books/${bookId}`);
-
-    return res;
+    return navigate(`/books/${bookId}`);
   };
+
+  console.log(user);
 
   return (
     <>
-      <div className="grid grid-cols-4 m-10 space-y-3">
-        <div className="col-start-1 sm:col-start-2 text-left">
-          <button onClick={() => navigate(-1)}>Back</button>
+      <div className="grid grid-cols-4 m-10 space-y-3 ">
+        <div className="col-start-1 sm:col-start-2 text-left pl-6">
+          <button onClick={() => navigate(-1)}>
+            <ArrowBackRoundedIcon fontSize="large" />
+          </button>
         </div>
-        <div className="col-start-1 col-end-5 p-5 sm:col-start-2 sm:col-span-2 border rounded-2xl">
-          <form className=" space-y-12">
+        <div className="col-start-1 col-end-5 p-5 sm:col-start-2 sm:col-span-2">
+          <form className="space-y-12 p-5  border border-neutral rounded-2xl">
             <div>
               <TextInput
                 label="Book title"

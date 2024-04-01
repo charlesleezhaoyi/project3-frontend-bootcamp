@@ -12,35 +12,41 @@ const SingleBook = () => {
   const [categoryNames, setCategoryNames] = useState({});
   const [email, setEmail] = useState([]);
   const [isBookByDonor, setIsBookByDonor] = useState(false);
-  const { user } = useAuth0();
+  const { user, isLoading } = useAuth0();
 
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
       const getBook = async () => {
+        console.log(id);
+        console.log(`${BACKEND_URL}/books/${id}`);
         const singleBook = await axios.get(`${BACKEND_URL}/books/${id}`);
+        console.log(singleBook.data);
+        const booksData = singleBook.data;
+        setLoadBook(booksData);
         const donations = await axios.get(`${BACKEND_URL}/donations/${id}`);
         const donorEmail = donations.data.email;
         setEmail(donorEmail);
-        const booksData = singleBook.data;
+
         const bookCategories = booksData.categories;
         setCategories(bookCategories);
-        setLoadBook(booksData);
       };
       getBook();
     }
   }, [id]);
 
+  console.log(id);
+
   console.log(email);
-  console.log(user.email);
+
   console.log(isBookByDonor);
 
   useEffect(() => {
-    if (email === user.email) {
+    if (!isLoading && email === user.email) {
       setIsBookByDonor(true);
     }
-  }, [email]);
+  }, [email, isLoading]);
 
   useEffect(() => {
     if (categories) {
