@@ -14,7 +14,7 @@ function AuthWrapper({ children }) {
       } else if (isAuthenticated && !user.email.verified) {
         // If the user is authenticated, we send their data to our API
         axios.post(`${BACKEND_URL}/users`, {
-          email: user.email,
+          userEmail: user.email,
         });
       }
     }
