@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../constants";
 
 function AuthWrapper({ children }) {
   const { isAuthenticated, isLoading, loginWithRedirect, user } = useAuth0();
@@ -12,8 +13,8 @@ function AuthWrapper({ children }) {
         loginWithRedirect();
       } else if (isAuthenticated && !user.email.verified) {
         // If the user is authenticated, we send their data to our API
-        axios.post("http://localhost:3000/users/", {
-          userEmail: user.email,
+        axios.post(`${BACKEND_URL}/users`, {
+          email: user.email,
         });
       }
     }
