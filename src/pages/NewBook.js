@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Common/Button";
 import {
@@ -14,6 +14,7 @@ import useLoadCategories from "../hooks.js/useLoadCategories.js";
 
 let nextId = 0;
 const NewBook = () => {
+  const { user } = useAuth0();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
@@ -87,21 +88,24 @@ const NewBook = () => {
       review: review,
       photoUrl: photoArr,
       name: categoryArr,
+      email: user.email,
     };
 
     const res = await axios.post(`${BACKEND_URL}/books`, obj);
     const bookId = res.data.id;
+
     navigate(`/books/${bookId}`);
+
     return res;
   };
 
   return (
     <>
       <div className="grid grid-cols-4 m-10 space-y-3">
-        <div className="col-start-2">
+        <div className="col-start-1 sm:col-start-2 text-left">
           <button onClick={() => navigate(-1)}>Back</button>
         </div>
-        <div className="col-start-2 col-span-2 p-5 border rounded-2xl">
+        <div className="col-start-1 col-end-5 p-5 sm:col-start-2 sm:col-span-2 border rounded-2xl">
           <form className=" space-y-12">
             <div>
               <TextInput
