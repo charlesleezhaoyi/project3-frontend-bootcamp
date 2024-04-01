@@ -37,10 +37,11 @@ const Home = () => {
   }, [category, books]);
 
   useEffect(() => {
+    //console.log(isAuthenticated, user.email_verified);
     if (!isAuthenticated || !user.email_verified) {
       navigate("/onboarding");
     }
-  }, [isAuthenticated, user, navigate]);
+  }, []);
 
   return (
     <div>

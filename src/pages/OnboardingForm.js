@@ -42,14 +42,13 @@ const Onboarding = () => {
       //   //return;
       // }
       try {
-        // Make sure to await the axios call
-        await axios.put("http://localhost:3000/users/", {
+        await axios.put(`${BACKEND_URL}/users`, {
           userEmail: user.email,
           firstName: formData.firstName,
           lastName: formData.lastName,
           phone: formData.phone,
         });
-        navigate("/home"); // Navigate after successful update
+        navigate("/home");
       } catch (error) {
         console.error("Error saving user data:", error);
         // Optionally, set an error state here to inform the user of the error.
