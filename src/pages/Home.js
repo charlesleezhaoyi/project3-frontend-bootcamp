@@ -10,13 +10,14 @@ import useLoadBooks from "../hooks.js/useLoadBooks.js";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Home = () => {
   const { categories } = useLoadCategories();
   const { books } = useLoadBooks();
   const [category, setCategory] = useState("");
   const [bookList, setBookList] = useState([]);
-
+  const { isAuthenticated, user } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +38,12 @@ const Home = () => {
       getCategory();
     }
   }, [category, books]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user.email_verified) {
+      navigate("/onboarding");
+    }
+  }, [isAuthenticated, user, navigate]);
 
   return (
     <div>
