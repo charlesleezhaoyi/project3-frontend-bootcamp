@@ -66,12 +66,6 @@ const Onboarding = () => {
     }));
   };
 
-  useEffect(() => {
-    if (isAuthenticated && user.email_verified) {
-      navigate("/home");
-    }
-  }, [isAuthenticated, user, navigate]);
-
   return (
     <div className="px-4 sm:P-12 lg:px-16">
       <form className="text-left">
@@ -105,8 +99,8 @@ const Onboarding = () => {
                 <p className="mt-3 text-sm leading-6 text-gray-600">
                   Write a few sentences about yourself.
                 </p>
-                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div class="sm:col-span-3">
+                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div className="sm:col-span-3">
                     <label
                       htmlFor="first-name"
                       className="block text-sm font-medium leading-6 text-gray-900"

@@ -9,12 +9,14 @@ import useLoadCategories from "../hooks.js/useLoadCategories.js";
 import useLoadBooks from "../hooks.js/useLoadBooks.js";
 import Button from "../components/Common/Button.js";
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Home = () => {
   const { categories } = useLoadCategories();
   const { books } = useLoadBooks();
   const [category, setCategory] = useState("");
   const [bookList, setBookList] = useState([]);
+  const { isAuthenticated, user } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +35,12 @@ const Home = () => {
       getCategory();
     }
   }, [category, books]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user.email_verified) {
+      navigate("/onboarding");
+    }
+  }, [isAuthenticated, user, navigate]);
 
   return (
     <div>

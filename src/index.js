@@ -7,7 +7,7 @@ import "./index.css";
 
 import App from "./App";
 import Home from "./pages/Home";
-// import AuthWrapper from "./components/AuthWrapper";
+import AuthWrapper from "./components/AuthWrapper";
 import Forum from "./components/Forum/Forum";
 import ForumMainPage from "./components/Forum/ForumMain/ForumMainPage";
 import ForumCreatePost from "./components/Forum/ForumCreatePost";
@@ -23,7 +23,7 @@ root.render(
   <Auth0Provider
     domain={process.env.REACT_APP_DOMAIN}
     clientId={process.env.REACT_APP_CLIENT_ID}
-    redirectUri={`${window.location.origin}/onboarding`}
+    redirectUri={`${window.location.origin}/home`}
     audience={process.env.REACT_APP_AUDIENCE}
     scope="read:current_user update:current_user_metadata"
   >
@@ -36,17 +36,17 @@ root.render(
             index
             path="/home"
             element={
-              // <AuthWrapper>
-              <Home />
-              // </AuthWrapper> */}
+              <AuthWrapper>
+                <Home />
+              </AuthWrapper>
             }
           />
           <Route
             path="/onboarding"
             element={
-              // <AuthWrapper>
-              <Onboarding />
-              // </AuthWrapper>
+              <AuthWrapper>
+                <Onboarding />
+              </AuthWrapper>
             }
           ></Route>
           <Route path="/forum" element={<Forum />}>
