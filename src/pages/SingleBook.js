@@ -32,6 +32,10 @@ const SingleBook = () => {
     }
   }, [id]);
 
+  console.log(email);
+  console.log(user.email);
+  console.log(isBookByDonor);
+
   useEffect(() => {
     if (email === user.email) {
       setIsBookByDonor(true);

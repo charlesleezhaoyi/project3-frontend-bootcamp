@@ -10,7 +10,7 @@ export const TextInput = ({ label, type, onChange, placeholder, value }) => {
         <input
           type={type}
           placeholder={placeholder}
-          className="input input-bordered w-full max-w-xs italic"
+          className="input input-bordered w-full max-w-xs"
           onChange={onChange}
           value={value}
         />
@@ -27,7 +27,7 @@ export const TextArea = ({ label, onChange, placeholder, value }) => {
           <span className="label-text">{label}</span>
         </div>
         <textarea
-          className="input input-bordered h-24 italic"
+          className="input input-bordered h-24 "
           placeholder={placeholder}
           onChange={onChange}
           value={value}

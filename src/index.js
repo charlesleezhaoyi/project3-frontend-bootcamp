@@ -7,7 +7,7 @@ import "./index.css";
 
 import App from "./App";
 import Home from "./pages/Home";
-// import AuthWrapper from "./components/AuthWrapper";
+import AuthWrapper from "./components/AuthWrapper";
 import Forum from "./components/Forum/Forum";
 import ForumMainPage from "./components/Forum/ForumMain/ForumMainPage";
 import ForumCreatePost from "./components/Forum/ForumCreatePost";
@@ -16,7 +16,8 @@ import Onboarding from "./pages/OnboardingForm";
 import ForumPost from "./components/Forum/ForumPost/ForumPost";
 import NewBook from "./pages/NewBook";
 import SingleBook from "./pages/SingleBook";
-// import BookList from "./components/Dashboard/BookList";
+import BookList from "./components/Dashboard/BookList";
+import CategoryList from "./components/Dashboard/CategoryList";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -29,26 +30,27 @@ root.render(
   >
     <BrowserRouter>
       <Routes>
-        {/* Route that provides base app UI */}
         <Route path="/" element={<App />}>
-          {/* Route that matches all other paths */}
           <Route
             index
             path="/home"
             element={
-              // <AuthWrapper>
-              <Home />
-              // </AuthWrapper> */}
+              <AuthWrapper>
+                <Home />
+              </AuthWrapper>
             }
-          />
+          ></Route>
           <Route
             path="/onboarding"
             element={
-              // <AuthWrapper>
-              <Onboarding />
-              // </AuthWrapper>
+              <AuthWrapper>
+                <Onboarding />
+              </AuthWrapper>
             }
-          ></Route>
+          />
+
+          <Route path="/create-newbook" element={<NewBook />} />
+          <Route path="/books/:id" element={<SingleBook />} />
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
             <Route path="create/post" element={<ForumCreatePost />} />
@@ -57,8 +59,6 @@ root.render(
           </Route>
           {/* <Route path="*" element={"Nothing here!"} /> */}
         </Route>
-        <Route path="/create-newbook" element={<NewBook />} />
-        <Route path="/books/:id" element={<SingleBook />} />
       </Routes>
     </BrowserRouter>
   </Auth0Provider>

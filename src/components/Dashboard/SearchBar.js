@@ -1,29 +1,15 @@
 import React, { useState } from "react";
 
-const SearchBar = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSearch(searchTerm);
-  };
-
+const SearchBar = ({ searchParams, setSearchParams }) => {
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex items-center max-w-md mx-auto bg-white rounded-full border border-gray-200"
-    >
+    <form className="flex items-center max-w-md mx-auto bg-white rounded-full border border-gray-200">
       <input
         type="search"
         name="search"
         placeholder="Search..."
-        value={searchTerm}
-        onChange={handleChange}
         className="w-full px-4 py-2 rounded-full focus:outline-none"
+        value={searchParams}
+        onChange={(e) => setSearchParams(e.target.value)}
       />
       <button
         type="submit"
