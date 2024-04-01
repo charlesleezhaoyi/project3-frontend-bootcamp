@@ -15,6 +15,7 @@ const Home = () => {
   const { books } = useLoadBooks();
   const [category, setCategory] = useState("");
   const [bookList, setBookList] = useState([]);
+  const [donor, setDonor] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,8 +38,10 @@ const Home = () => {
   return (
     <div>
       <NavBar />
-      <SearchBar onSearch={(term) => console.log(term)} />
+      {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
+      <SearchBar />
       <CategoryList categories={categories} setCategory={setCategory} />
+
       <BookList bookList={bookList} />
       <div className="flex gap-4 justify-center items-center">
         <Button
