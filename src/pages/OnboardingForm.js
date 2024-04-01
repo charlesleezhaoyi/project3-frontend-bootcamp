@@ -33,18 +33,16 @@ const Onboarding = () => {
     console.log(isAuthenticated, user.email_verified);
     // The isAuthenticated check and the rest of the logic should be inside this function.
     if (isAuthenticated) {
-      // if (!user.email_verified) {
-      //   setErrorAlert(
-      //     <ErrorAlert message="Please verify your email address." />
-      //   );
-      //   // Add a return statement here to stop execution if the email is not verified.
-      //   //return;
-      // }
+      if (!user.email_verified) {
+        setErrorAlert(
+          <ErrorAlert message="Please verify your email address." />
+        );
+      }
       try {
         const { firstName, lastName, phone } = formData;
 
         const userObj = {
-          email: email,
+          userEmail: email,
           firstName: firstName,
           lastName: lastName,
           phone: phone,
