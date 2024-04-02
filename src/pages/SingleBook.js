@@ -4,25 +4,22 @@ import { BACKEND_URL } from "../constants.js";
 import axios from "axios";
 import Request from "../components/Request";
 import { useAuth0 } from "@auth0/auth0-react";
-import Acceptance from "../components/Acceptance.js";
+import RequestList from "../components/RequestList.js";
 
 const SingleBook = () => {
   const [loadBook, setLoadBook] = useState({});
   const [categories, setCategories] = useState([]);
   const [categoryNames, setCategoryNames] = useState({});
-  const [email, setEmail] = useState([]);
+  const [email, setEmail] = useState(null);
   const [isBookByDonor, setIsBookByDonor] = useState(false);
   const { user, isLoading } = useAuth0();
 
   const { id } = useParams();
 
   useEffect(() => {
-    if (id) {
+    if (id && !isLoading) {
       const getBook = async () => {
-        console.log(id);
-        console.log(`${BACKEND_URL}/books/${id}`);
         const singleBook = await axios.get(`${BACKEND_URL}/books/${id}`);
-        console.log(singleBook.data);
         const booksData = singleBook.data;
         setLoadBook(booksData);
         const donorEmailRes = await axios.get(
@@ -34,9 +31,8 @@ const SingleBook = () => {
       };
       getBook();
     }
-  }, [id]);
+  }, [id, isLoading]);
 
-  console.log(email, user.email);
   useEffect(() => {
     if (!isLoading && email === user.email) {
       setIsBookByDonor(true);
@@ -71,7 +67,7 @@ const SingleBook = () => {
             <div>Gallery: {}</div>
           </form>
           <div>
-            {isBookByDonor ? <Acceptance book={loadBook} /> : <Request />}
+            {isBookByDonor ? <RequestList book={loadBook} /> : <Request />}
           </div>
         </div>
       </div>
