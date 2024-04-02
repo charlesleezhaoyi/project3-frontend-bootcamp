@@ -8,7 +8,6 @@ const useLoadCategories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       const res = await axios.get(`${BACKEND_URL}/categories`);
-      console.log("here");
       const categoriesData = res.data;
       setCategories(categoriesData);
     };

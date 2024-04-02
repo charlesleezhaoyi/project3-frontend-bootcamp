@@ -25,10 +25,10 @@ const SingleBook = () => {
         console.log(singleBook.data);
         const booksData = singleBook.data;
         setLoadBook(booksData);
-        const donations = await axios.get(`${BACKEND_URL}/donations/${id}`);
-        const donorEmail = donations.data.email;
-        setEmail(donorEmail);
-
+        const donorEmailRes = await axios.get(
+          `${BACKEND_URL}/donations/donor/${id}`
+        );
+        setEmail(donorEmailRes.data);
         const bookCategories = booksData.categories;
         setCategories(bookCategories);
       };
@@ -36,6 +36,7 @@ const SingleBook = () => {
     }
   }, [id]);
 
+  console.log(email, user.email);
   useEffect(() => {
     if (!isLoading && email === user.email) {
       setIsBookByDonor(true);
