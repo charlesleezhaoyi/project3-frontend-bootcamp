@@ -19,12 +19,11 @@ const RequestList = ({ book }) => {
     };
     getRequests();
   }, [book.id]);
-
   const requestDisplay = requests.map((request) => {
     return (
       <li key={request.id}>
         {request.bene.email},{request.status},
-        <AcceptRequestButton requesterId={request.beneId} />
+        <AcceptRequestButton requesterId={request.beneId} bookId={book.id} />
       </li>
     );
   });
