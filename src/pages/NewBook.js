@@ -37,7 +37,6 @@ const NewBook = () => {
   const handleFileChange = (e) => {
     indexCount = indexCount + 1;
     const imageFile = e.target.files[0];
-    console.log(imageFile);
     const convertedImageUrl = URL.createObjectURL(imageFile);
     setPhotoArr((photoArr) => [
       ...photoArr,
@@ -99,8 +98,6 @@ const NewBook = () => {
 
     return navigate(`/books/${bookId}`);
   };
-
-  console.log(user);
 
   return (
     <>

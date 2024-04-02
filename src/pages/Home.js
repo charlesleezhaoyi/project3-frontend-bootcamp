@@ -10,14 +10,14 @@ import useLoadBooks from "../hooks.js/useLoadBooks.js";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import { useNavigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+// import { useAuth0 } from "@auth0/auth0-react";
 
 const Home = () => {
   const { categories } = useLoadCategories();
   const { books } = useLoadBooks();
   const [category, setCategory] = useState("");
   const [bookList, setBookList] = useState([]);
-  const { isAuthenticated, user } = useAuth0();
+  // const { isAuthenticated, user } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,12 +39,11 @@ const Home = () => {
     }
   }, [category, books]);
 
-  useEffect(() => {
-    //console.log(isAuthenticated, user.email_verified);
-    if (!isAuthenticated || !user.email_verified) {
-      navigate("/onboarding");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isAuthenticated || !user.email_verified) {
+  //     navigate("/onboarding");
+  //   }
+  // }, []);
 
   return (
     <div>
@@ -52,7 +51,6 @@ const Home = () => {
       {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
       <SearchBar />
       <CategoryList categories={categories} setCategory={setCategory} />
-
       <BookList bookList={bookList} />
       <div className="flex gap-4 justify-center items-center my-12">
         <button onClick={() => navigate("/create-newbook")}>
