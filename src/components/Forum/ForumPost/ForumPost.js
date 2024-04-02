@@ -19,6 +19,7 @@ export default function ForumPost() {
   const [postData, setPostData] = useState(null);
   const [commentList, setCommentList] = useState(null);
   const [isUserLiked, setIsUserLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(null);
   const [, setErrorMessage] = useOutletContext();
   const navigate = useNavigate();
   const [query] = useSearchParams();
@@ -38,6 +39,7 @@ export default function ForumPost() {
         const { comments, ...incomingPostData } = data;
         setCommentList(comments);
         setPostData(incomingPostData);
+        setLikeCount(incomingPostData.likes.length);
       } catch (error) {
         setErrorMessage(error.message);
       }
@@ -67,6 +69,7 @@ export default function ForumPost() {
         }
       );
       setIsUserLiked(data);
+      setLikeCount((prev) => (data ? prev + 1 : prev - 1));
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -98,7 +101,7 @@ export default function ForumPost() {
       <div className="flex justify-between w-full p-2 border-b-2 border-neutral">
         <b className="text-2xl text-left grow">{postData.title}</b>
         <div className="flex items-center">
-          {postData.likes.length}
+          {likeCount}
           <label className="swap swap-flip">
             <input
               type="checkbox"

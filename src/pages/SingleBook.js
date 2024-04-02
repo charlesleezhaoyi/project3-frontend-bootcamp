@@ -37,7 +37,7 @@ const SingleBook = () => {
     if (!isLoading && email === user.email) {
       setIsBookByDonor(true);
     }
-  }, [email, isLoading]);
+  }, [email, user.email, isLoading]);
 
   useEffect(() => {
     if (categories) {
