@@ -2,6 +2,7 @@ import axios from "axios";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Loading from "../../Common/Loading";
 
 export default function SectionColumn({ category, sort, setErrorMessage }) {
   const [postData, setPostData] = useState(null);
@@ -56,11 +57,7 @@ export default function SectionColumn({ category, sort, setErrorMessage }) {
       >
         <b className="text-lg">{category.name}</b>
       </Link>
-      {isLoadingData ? (
-        <span className="loading loading-dots"></span>
-      ) : (
-        postDataDisplay
-      )}
+      {isLoadingData ? <Loading /> : postDataDisplay}
     </div>
   );
 }

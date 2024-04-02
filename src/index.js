@@ -1,10 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import { Auth0Provider } from "@auth0/auth0-react";
 import "./index.css";
-
 import App from "./App";
 import Home from "./pages/Home";
 import AuthWrapper from "./components/AuthWrapper";
@@ -16,8 +14,6 @@ import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection"
 import ForumPost from "./components/Forum/ForumPost/ForumPost";
 import NewBook from "./pages/NewBook";
 import SingleBook from "./pages/SingleBook";
-// import BookList from "./components/Dashboard/BookList";
-// import CategoryList from "./components/Dashboard/CategoryList";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -49,7 +45,7 @@ root.render(
             }
           />
           <Route path="/create-newbook" element={<NewBook />} />
-          <Route path="/books/:id" element={<SingleBook />} />
+          <Route path="/books/:bookId" element={<SingleBook />} />
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
             <Route path="create/post" element={<ForumCreatePost />} />

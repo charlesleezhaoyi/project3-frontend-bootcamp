@@ -3,6 +3,8 @@ import { useOutletContext } from "react-router-dom";
 import Select from "react-select";
 import axios from "axios";
 import SectionColumn from "./SectionColumn";
+import Loading from "../../Common/Loading";
+
 const sortOption = [
   { label: "Category", value: "name" },
   { label: "Popular Section", value: "popularSection" },
@@ -38,7 +40,7 @@ export default function ForumMainPage() {
       />
     ))
   ) : (
-    <span className="loading loading-dots loading-lg"></span>
+    <Loading />
   );
 
   return (

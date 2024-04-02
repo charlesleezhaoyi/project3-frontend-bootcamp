@@ -14,7 +14,6 @@ const Request = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!isLoading && user.email) {
       const requestObj = {
         content: content,

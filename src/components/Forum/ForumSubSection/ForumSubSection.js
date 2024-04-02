@@ -4,6 +4,7 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import ForumPostListItem from "./ForumPostListItem";
 import Select from "react-select";
+import Loading from "../../Common/Loading";
 const sortOption = [
   { label: "Popular", value: "popular" },
   { label: "Newest Post", value: "newestPost" },
@@ -34,7 +35,7 @@ export default function ForumSubSection() {
   let postListItems = postList ? (
     postList.map((post) => <ForumPostListItem post={post} key={post.id} />)
   ) : (
-    <span className="loading loading-dots loading-lg"></span>
+    <Loading />
   );
 
   if (!!postList && postList.length === 0) {
