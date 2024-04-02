@@ -61,13 +61,6 @@ const NewBook = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const categoryArr = [];
-    selectedCategories.forEach((item) => {
-      const categoryName = item.label;
-      return categoryArr.push(categoryName);
-    });
-    const photos = photoArr.map(({ display, ...photo }) => photo);
-
     const obj = {
       title: title,
       author: author,
@@ -75,10 +68,11 @@ const NewBook = () => {
       releasedYear: releasedYear,
       condition: condition,
       review: review,
-      photos: photos,
-      name: categoryArr,
       email: user.email,
     };
+    obj.categories = selectedCategories.map((item) => item.label);
+    obj.photos = photoArr.map(({ display, ...photo }) => photo);
+
     const res = await axios.post(`${BACKEND_URL}/books`, obj);
     const bookId = res.data.id;
     return navigate(`/books/${bookId}`);
