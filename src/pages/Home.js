@@ -39,11 +39,11 @@ const Home = () => {
     }
   }, [category, books]);
 
-  useEffect(() => {
-    if (!isAuthenticated || !user.email_verified) {
-      navigate("/onboarding");
-    }
-  }, [isAuthenticated, user, navigate]);
+  // useEffect(() => {
+  //   if (!isAuthenticated || !user.email_verified) {
+  //     navigate("/onboarding");
+  //   }
+  // }, [isAuthenticated, user, navigate]);
 
   return (
     <div>

@@ -4,7 +4,7 @@ import { BACKEND_URL } from "../constants.js";
 import axios from "axios";
 import Request from "../components/Request";
 import { useAuth0 } from "@auth0/auth0-react";
-import Acceptance from "../components/Acceptance.js";
+import RequestList from "../components/RequestList.js";
 
 const SingleBook = () => {
   const [loadBook, setLoadBook] = useState({});
@@ -25,9 +25,12 @@ const SingleBook = () => {
         console.log(singleBook.data);
         const booksData = singleBook.data;
         setLoadBook(booksData);
-        const donations = await axios.get(`${BACKEND_URL}/donations/${id}`);
-        const donorEmail = donations.data.email;
-        setEmail(donorEmail);
+
+        const donorEmailRes = await axios.get(
+          `${BACKEND_URL}/donations/donor/${id}`
+        );
+
+        setEmail(donorEmailRes.data);
 
         const bookCategories = booksData.categories;
         setCategories(bookCategories);
@@ -46,7 +49,7 @@ const SingleBook = () => {
     if (!isLoading && email === user.email) {
       setIsBookByDonor(true);
     }
-  }, [email, isLoading]);
+  }, [email, user.email, isLoading]);
 
   useEffect(() => {
     if (categories) {
@@ -76,7 +79,7 @@ const SingleBook = () => {
             <div>Gallery: {}</div>
           </form>
           <div>
-            {isBookByDonor ? <Acceptance book={loadBook} /> : <Request />}
+            {isBookByDonor ? <RequestList book={loadBook} /> : <Request />}
           </div>
         </div>
       </div>
