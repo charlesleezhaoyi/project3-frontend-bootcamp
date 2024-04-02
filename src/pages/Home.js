@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BACKEND_URL } from "../constants.js";
 import axios from "axios";
-import NavBar from "../components/Common/NavBar";
 import BookList from "../components/Dashboard/BookList";
 import CategoryList from "../components/Dashboard/CategoryList";
 import SearchBar from "../components/Dashboard/SearchBar";
@@ -47,7 +46,6 @@ const Home = () => {
 
   return (
     <div>
-      <NavBar />
       {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
       <SearchBar />
       <CategoryList categories={categories} setCategory={setCategory} />

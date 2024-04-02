@@ -19,9 +19,9 @@ const SingleBook = () => {
     const getBook = async () => {
       const bookRes = await axios.get(`${BACKEND_URL}/books/${bookId}`);
       const { donation, categories, ...incomingBookData } = bookRes.data;
+      const categoryArr = categories.map((category) => category.name);
       setbookData(incomingBookData);
       setEmail(donation.donor.email);
-      const categoryArr = categories.map((category) => category.name);
       setCategoriesName(categoryArr);
     };
     getBook();
