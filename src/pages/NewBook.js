@@ -101,8 +101,8 @@ const NewBook = () => {
   };
 
   return (
-    <div className="grid grid-cols-4 m-10 space-y-3">
-      <div className="col-start-1 sm:col-start-2 text-left pl-6">
+    <div className="w-5/6">
+      <div className="col-start-1 sm:col-start-2 text-left pt-6">
         <button onClick={() => navigate(-1)}>
           <ArrowBackRoundedIcon fontSize="large" />
         </button>

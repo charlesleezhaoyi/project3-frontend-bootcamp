@@ -50,12 +50,12 @@ const SingleBook = () => {
     };
   }, [photoURLs]);
 
-  const photosDisplay = photoURLs.map((url) => <Photo url={url} />);
+  const photosDisplay = photoURLs.map((url) => <Photo url={url} key={url} />);
 
   return isLoadingData ? (
     <Loading />
   ) : (
-    <div className="w-5/6 self-center">
+    <div className="w-5/6">
       <div className="flex items-center py-5">
         <button className="btn btn-ghost" onClick={() => navigate(-1)}>
           <ArrowBackOutlinedIcon fontSize="large" />

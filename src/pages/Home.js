@@ -29,7 +29,7 @@ const Home = () => {
     if (category) {
       const getCategory = async () => {
         const response = await axios.get(
-          `${BACKEND_URL}/categories/${category}`
+          `${BACKEND_URL}/books/category/${category}`
         );
         const filteredBooks = response.data;
         setBookList(filteredBooks);
