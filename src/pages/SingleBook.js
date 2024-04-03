@@ -9,6 +9,7 @@ import Loading from "../components/Common/Loading.js";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import { convertBufferToPhoto } from "../components/Common/convertPhoto.js";
 import Photo from "../components/Common/Photo.js";
+import RequestStatus from "../components/RequestStatus.js";
 
 const SingleBook = () => {
   const [, setErrorMessage] = useOutletContext();
@@ -16,31 +17,43 @@ const SingleBook = () => {
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [categoriesName, setCategoriesName] = useState(null);
   const [photoURLs, setPhotoURLs] = useState([]);
-  const [email, setEmail] = useState(null);
+  const [requests, setRequests] = useState([]);
+  const [isBookByDonor, setIsBookByDonor] = useState(false);
+  const [isBeneRequested, setIsBeneRequested] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth0();
-  const isBookByDonor = user && user.email === email;
+  const { user, isLoading } = useAuth0();
   const { bookId } = useParams();
 
   useEffect(() => {
-    const getBook = async () => {
+    const getBookAndRequest = async () => {
       try {
         const bookRes = await axios.get(`${BACKEND_URL}/books/${bookId}`);
         const { donation, categories, photos, ...incomingBookData } =
           bookRes.data;
         setbookData(incomingBookData);
-        setEmail(donation.donor.email);
+        setIsBookByDonor(user.email === donation.donor.email);
         setCategoriesName(categories.map((category) => category.name));
         setPhotoURLs(
           photos.map((photo) => convertBufferToPhoto(photo.file.data))
+        );
+        const requestRes = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/requests/book/${bookId}`
+        );
+        console.log(requestRes.data);
+        setRequests(requestRes.data);
+        setIsBeneRequested(
+          user.email !== donation.donor.email &&
+            requestRes.data.find((request) => request.bene.email === user.email)
         );
         setIsLoadingData(false);
       } catch (error) {
         setErrorMessage(error.message);
       }
     };
-    getBook();
-  }, [bookId, setErrorMessage]);
+    if (!isLoading) {
+      getBookAndRequest();
+    }
+  }, [bookId, isLoading, user, setErrorMessage]);
 
   useEffect(() => {
     return function clearupUrl() {
@@ -51,6 +64,14 @@ const SingleBook = () => {
   }, [photoURLs]);
 
   const photosDisplay = photoURLs.map((url) => <Photo url={url} key={url} />);
+
+  const nonDonorRequestDisplay = isBeneRequested ? (
+    <RequestStatus
+      request={requests.find((request) => request.bene.email === user.email)}
+    />
+  ) : (
+    <Request />
+  );
 
   return isLoadingData ? (
     <Loading />
@@ -106,9 +127,12 @@ const SingleBook = () => {
           {photosDisplay}
         </div>
       </div>
-      {isBookByDonor ? <RequestList book={bookData} /> : <Request />}
+      {isBookByDonor ? (
+        <RequestList book={bookData} requests={requests} />
+      ) : (
+        nonDonorRequestDisplay
+      )}
     </div>
   );
 };
-
 export default SingleBook;

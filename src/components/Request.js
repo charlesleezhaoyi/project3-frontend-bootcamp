@@ -10,36 +10,32 @@ const Request = () => {
   const [content, setContent] = useState("");
   const { user, isLoading } = useAuth0();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { bookId } = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isLoading && user.email) {
       const requestObj = {
         content: content,
-        bookId: id,
+        bookId: bookId,
         email: user.email,
       };
-
-      const res = await axios.post(`${BACKEND_URL}/requests`, requestObj);
-      console.log(res.data);
+      await axios.post(`${BACKEND_URL}/requests`, requestObj);
 
       return navigate("/home");
     }
   };
 
   return (
-    <>
-      <form className="border rounded-lg p-5 space-y-3" onSubmit={handleSubmit}>
-        <div className="font-semibold text-2xl">Submit book request</div>
-        <TextArea
-          onChange={(e) => setContent(e.target.value)}
-          value={content}
-          placeholder="I want this book because..."
-        />
-        <Button label="Request this book" />
-      </form>
-    </>
+    <form className="border rounded-lg p-5 space-y-3" onSubmit={handleSubmit}>
+      <div className="font-semibold text-2xl">Submit book request</div>
+      <TextArea
+        onChange={(e) => setContent(e.target.value)}
+        value={content}
+        placeholder="I want this book because..."
+      />
+      <Button label="Request this book" />
+    </form>
   );
 };
 

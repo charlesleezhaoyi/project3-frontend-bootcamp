@@ -1,24 +1,7 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AcceptRequestButton from "./AcceptRequestButton";
 
-const RequestList = ({ book }) => {
-  const [requests, setRequests] = useState([]);
-
-  useEffect(() => {
-    const getRequests = async () => {
-      try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/requests/book/${book.id}`
-        );
-        setRequests(data);
-      } catch (error) {
-        console.log(error);
-        //Need to change later
-      }
-    };
-    getRequests();
-  }, [book.id]);
+const RequestList = ({ book, requests }) => {
   const requestDisplay = requests.map((request) => {
     return (
       <li key={request.id}>
