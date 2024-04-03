@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import useLoadCategories from "../hooks.js/useLoadCategories.js";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import Photo from "../components/Common/Photo.js";
 
 const NewBook = () => {
   const { user } = useAuth0();
@@ -29,32 +30,28 @@ const NewBook = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    return function clearupURLs() {
+    return function clearupURL() {
       for (const { url } of photoArr) {
         URL.revokeObjectURL(url);
       }
     };
-  }, [photoArr]);
+  });
 
   const handleChange = (selectedItem) => {
     setSelectedCategories(selectedItem);
   };
 
   const handleFileChange = (e) => {
-    const photoUrl = URL.createObjectURL(e.target.files[0]);
+    const url = URL.createObjectURL(e.target.files[0]);
     setPhotoArr((photoArr) => [
       ...photoArr,
-      { file: e.target.files[0], url: photoUrl },
+      { file: e.target.files[0], url: url },
     ]);
   };
 
   const photos = photoArr.map((photo, i) => {
     return (
-      <div
-        className="w-20 h-32 sm:w-32 sm:h-44 bg-center bg-cover flex justify-end border rounded-lg"
-        key={i}
-        style={{ backgroundImage: `url(${photo.url})` }}
-      >
+      <Photo url={photo.url} key={i}>
         <button
           className="btn btn-xs glass m-1"
           onClick={() => {
@@ -63,7 +60,7 @@ const NewBook = () => {
         >
           X
         </button>
-      </div>
+      </Photo>
     );
   });
 
