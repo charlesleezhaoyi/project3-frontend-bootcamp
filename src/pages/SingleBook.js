@@ -39,7 +39,6 @@ const SingleBook = () => {
         const requestRes = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/requests/book/${bookId}`
         );
-        console.log(requestRes.data);
         setRequests(requestRes.data);
         setIsBeneRequested(
           user.email !== donation.donor.email &&
@@ -70,7 +69,7 @@ const SingleBook = () => {
       request={requests.find((request) => request.bene.email === user.email)}
     />
   ) : (
-    <Request />
+    <Request setErrorMessage={setErrorMessage} />
   );
 
   return isLoadingData ? (

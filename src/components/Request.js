@@ -3,26 +3,29 @@ import { TextArea } from "./Common/Input";
 import Button from "./Common/Button";
 import { useAuth0 } from "@auth0/auth0-react";
 import { BACKEND_URL } from "../constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const Request = () => {
+const Request = ({ setErrorMessage }) => {
   const [content, setContent] = useState("");
-  const { user, isLoading } = useAuth0();
-  const navigate = useNavigate();
+  const { user } = useAuth0();
   const { bookId } = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isLoading && user.email) {
+    try {
+      if (!content.length) {
+        throw new Error("Please type in your request content");
+      }
       const requestObj = {
         content: content,
         bookId: bookId,
         email: user.email,
       };
       await axios.post(`${BACKEND_URL}/requests`, requestObj);
-
-      return navigate("/home");
+      window.location.reload();
+    } catch (error) {
+      setErrorMessage(error.message);
     }
   };
 
