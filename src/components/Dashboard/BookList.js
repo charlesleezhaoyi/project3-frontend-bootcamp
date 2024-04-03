@@ -1,17 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import noImage from "../../img/noBookImage.png";
 
 const BookList = ({ bookList }) => {
   const navigate = useNavigate();
 
   const bookListDisplay = bookList.map((book) => {
+    // const imageFile = book.photos.length && new Blob(book.photos[0].file);
+    // const photoUrl = imageFile ? URL.createObjectURL(imageFile) : noImage;
     return (
       <button key={book.id} onClick={() => navigate(`/books/${book.id}`)}>
         <div className="group">
           <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
             <img
-              src={book.photo}
-              alt={book.imageAlt}
+              src={"photoUrl"}
+              alt={book.title}
               className="h-full w-full object-cover object-center group-hover:opacity-75"
             />
           </div>

@@ -32,25 +32,21 @@ const NewBook = () => {
   };
 
   const handleFileChange = (e) => {
-    const imageFile = new Blob([e.target.files[0]]);
-    const convertedImageUrl = URL.createObjectURL(imageFile);
-    setPhotoArr((photoArr) => [
-      ...photoArr,
-      { display: convertedImageUrl, file: imageFile, index: photoArr.length },
-    ]);
+    setPhotoArr((photoArr) => [...photoArr, e.target.files[0]]);
   };
 
-  const photos = photoArr.map((image) => {
+  const photos = photoArr.map((image, i) => {
+    const photoUrl = URL.createObjectURL(image);
     return (
       <div
         className="w-20 h-32 sm:w-32 sm:h-44 bg-center bg-cover flex justify-end border rounded-lg"
-        key={image.index}
-        style={{ backgroundImage: `url(${image.display})` }}
+        key={i}
+        style={{ backgroundImage: `url(${photoUrl})` }}
       >
         <button
           className="btn btn-xs glass m-1"
           onClick={() => {
-            setPhotoArr(photoArr.filter((item) => item.index !== image.index));
+            setPhotoArr(photoArr.filter((photo) => photo !== image));
           }}
         >
           X
@@ -61,7 +57,8 @@ const NewBook = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const obj = {
+    const formData = new FormData();
+    const data = {
       title: title,
       author: author,
       description: description,
@@ -70,10 +67,12 @@ const NewBook = () => {
       review: review,
       email: user.email,
     };
-    obj.categories = selectedCategories.map((item) => item.label);
-    obj.photos = photoArr.map(({ display, ...photo }) => photo);
-
-    const res = await axios.post(`${BACKEND_URL}/books`, obj);
+    data.categories = selectedCategories.map((item) => item.label);
+    formData.append("data", JSON.stringify(data));
+    for (const file of photoArr) {
+      formData.append(`image`, file);
+    }
+    const res = await axios.post(`${BACKEND_URL}/books`, formData);
     const bookId = res.data.id;
     return navigate(`/books/${bookId}`);
   };
@@ -85,7 +84,7 @@ const NewBook = () => {
         </button>
       </div>
       <div className="col-start-1 col-end-5 p-5 sm:col-start-2 sm:col-span-2">
-        <form className="space-y-12 p-5  border border-neutral rounded-2xl">
+        <div className="space-y-12 p-5  border border-neutral rounded-2xl">
           <div>
             <TextInput
               label="Book title"
@@ -139,7 +138,7 @@ const NewBook = () => {
           <div>
             <Button label="Submit" onClick={handleSubmit} />
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
