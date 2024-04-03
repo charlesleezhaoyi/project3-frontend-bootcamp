@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BACKEND_URL } from "../constants.js";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import Button from "../components/Common/Button";
 import {
   TextArea,
@@ -25,6 +25,7 @@ const NewBook = () => {
   const [photoArr, setPhotoArr] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const { categories } = useLoadCategories();
+  const [, setErrorMessage] = useOutletContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,26 +69,40 @@ const NewBook = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    const data = {
-      title: title,
-      author: author,
-      description: description,
-      releasedYear: releasedYear,
-      condition: condition,
-      review: review,
-      email: user.email,
-    };
-    data.categories = selectedCategories.map((item) => item.label);
-    formData.append("data", JSON.stringify(data));
-    for (const { file } of photoArr) {
-      formData.append(`image`, file);
-    }
-    const res = await axios.post(`${BACKEND_URL}/books`, formData);
-    const bookId = res.data.id;
+    try {
+      const data = {
+        title: title,
+        author: author,
+        description: description,
+        releasedYear: releasedYear,
+        condition: condition,
+        review: review,
+      };
+      for (const subData of Object.values(data)) {
+        if (!subData.length) {
+          throw new Error("Please fill out the form.");
+        }
+      }
+      data.email = user.email;
+      if (!selectedCategories.length) {
+        throw new Error("Please choose at least one category");
+      }
+      data.categories = selectedCategories.map((item) => item.label);
 
-    return navigate(`/books/${bookId}`);
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(data));
+      for (const { file } of photoArr) {
+        formData.append(`image`, file);
+      }
+      const res = await axios.post(`${BACKEND_URL}/books`, formData);
+      const bookId = res.data.id;
+
+      return navigate(`/books/${bookId}`);
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
+
   return (
     <div className="grid grid-cols-4 m-10 space-y-3">
       <div className="col-start-1 sm:col-start-2 text-left pl-6">
@@ -96,7 +111,7 @@ const NewBook = () => {
         </button>
       </div>
       <div className="col-start-1 col-end-5 p-5 sm:col-start-2 sm:col-span-2">
-        <form className="space-y-12 p-5  border border-neutral rounded-2xl">
+        <div className="space-y-12 p-5  border border-neutral rounded-2xl">
           <div>
             <TextInput
               label="Book title"
@@ -150,7 +165,7 @@ const NewBook = () => {
           <div>
             <Button label="Submit" onClick={handleSubmit} />
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

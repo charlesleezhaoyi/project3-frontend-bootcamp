@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { BACKEND_URL } from "../constants.js";
 import axios from "axios";
 import Request from "../components/Request";
@@ -8,6 +8,7 @@ import RequestList from "../components/RequestList.js";
 import Loading from "../components/Common/Loading.js";
 
 const SingleBook = () => {
+  const [, setErrorMessage] = useOutletContext();
   const [bookData, setbookData] = useState(null);
   const [categoriesName, setCategoriesName] = useState(null);
   const [email, setEmail] = useState(null);
@@ -17,15 +18,19 @@ const SingleBook = () => {
 
   useEffect(() => {
     const getBook = async () => {
-      const bookRes = await axios.get(`${BACKEND_URL}/books/${bookId}`);
-      const { donation, categories, ...incomingBookData } = bookRes.data;
-      const categoryArr = categories.map((category) => category.name);
-      setbookData(incomingBookData);
-      setEmail(donation.donor.email);
-      setCategoriesName(categoryArr);
+      try {
+        const bookRes = await axios.get(`${BACKEND_URL}/books/${bookId}`);
+        const { donation, categories, ...incomingBookData } = bookRes.data;
+        const categoryArr = categories.map((category) => category.name);
+        setbookData(incomingBookData);
+        setEmail(donation.donor.email);
+        setCategoriesName(categoryArr);
+      } catch (error) {
+        setErrorMessage(error.message);
+      }
     };
     getBook();
-  }, [bookId]);
+  }, [bookId, setErrorMessage]);
 
   return bookData ? (
     <div className="grid grid-cols-4 m-10 ">
