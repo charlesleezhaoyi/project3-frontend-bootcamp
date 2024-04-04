@@ -2,6 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../constants";
+import Loading from "./Common/Loading";
 
 function AuthWrapper({ children }) {
   const { isAuthenticated, isLoading, loginWithRedirect, user } = useAuth0();
@@ -21,7 +22,7 @@ function AuthWrapper({ children }) {
   }, [isAuthenticated, isLoading, loginWithRedirect, user]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return isAuthenticated ? children : null;
