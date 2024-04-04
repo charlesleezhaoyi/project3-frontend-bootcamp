@@ -1,3 +1,11 @@
+const statusStyle = {
+  pending: "bg-base-300",
+  accepted: "bg-success",
+  rejected: "bg-error",
+  cancelled: "bg-warning",
+  collected: "bg-success",
+};
+
 export default function RequestStatus({ request }) {
   return (
     <div className="p-5">
@@ -6,7 +14,13 @@ export default function RequestStatus({ request }) {
         <tbody>
           <tr>
             <th>Status:</th>
-            <td>{request.status}</td>
+            <td>
+              <span
+                className={`p-2 text-sm rounded ${statusStyle[request.status]}`}
+              >
+                {request.status}
+              </span>
+            </td>
           </tr>
           <tr>
             <th>Content:</th>
