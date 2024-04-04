@@ -1,7 +1,11 @@
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-export default function AcceptRequestButton({ requesterId }) {
+export default function AcceptRequestButton({
+  requesterId,
+  disabled,
+  setErrorMessage,
+}) {
   const { bookId } = useParams();
   const handleSubmit = async () => {
     try {
@@ -9,10 +13,14 @@ export default function AcceptRequestButton({ requesterId }) {
         beneId: requesterId,
         bookId: bookId,
       });
+      window.location.reload();
     } catch (error) {
-      console.log(error);
-      //need to change later
+      setErrorMessage(error.message);
     }
   };
-  return <button onClick={handleSubmit}>Accept</button>;
+  return (
+    <button className="btn" disabled={disabled} onClick={handleSubmit}>
+      Accept
+    </button>
+  );
 }

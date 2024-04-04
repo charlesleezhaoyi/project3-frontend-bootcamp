@@ -133,7 +133,7 @@ const SingleBook = () => {
         </div>
       </div>
       {isBookByDonor ? (
-        <RequestList requests={requests} />
+        <RequestList requests={requests} setErrorMessage={setErrorMessage} />
       ) : (
         nonDonorRequestDisplay
       )}
