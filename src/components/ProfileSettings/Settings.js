@@ -1,9 +1,58 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { BACKEND_URL } from "../../constants";
 import LogoutButton from "../LogoutButton";
+import { Auth0Context } from "@auth0/auth0-react";
+import axios from "axios";
 
 const Settings = ({ open, setOpen }) => {
+  const navigate = useNavigate();
+  const user = useContext(Auth0Context);
+  console.log(user);
+  console.log(user.user.email);
+  const [userDonation, setUserDonation] = useState();
+  const [userRequest, setUserRequest] = useState();
+  // const [userfirstName, setUserFirstName] = useState();
+
+  // const accessToken = getAccessTokenSilently({
+  //   audience: process.env.REACT_APP_AUDIENCE,
+  //   scope: "read:current_user",
+  // });
+
+  // const user = {
+  //   firstName: "John",
+  //   lastName: "Doe",
+  //   donations: ["Donation 1", "Donation 2", "Donation 3"],
+  //   requests: ["Request 1", "Request 2", "Request 3"],
+  // };
+
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_URL}/donations/user/${user.user.email}`)
+      .then((res) => {
+        setUserDonation(res.data);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_URL}/requests/user/${user.user.email}`)
+      .then((res) => {
+        setUserRequest(res.data);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, []);
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -24,7 +73,7 @@ const Settings = ({ open, setOpen }) => {
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child
                 as={Fragment}
-                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                entyer="transform transition ease-in-out duration-500 sm:duration-700"
                 enterFrom="translate-x-full"
                 enterTo="translate-x-0"
                 leave="transform transition ease-in-out duration-500 sm:duration-700"
@@ -56,12 +105,45 @@ const Settings = ({ open, setOpen }) => {
                   <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                     <div className="px-4 sm:px-6">
                       <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                        Panel title
+                        About You
                       </Dialog.Title>
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      {/* Your content */}
-                      <LogoutButton />
+                      <div className="text-lg font-semibold">
+                        {user.firstName} {user.lastName}
+                      </div>
+                      <div className="mt-4 text-base font-semibold">
+                        Donations
+                      </div>
+                      <ul>
+                        {userDonation &&
+                          userDonation.map((donation, index) => (
+                            <div
+                              key={index}
+                              className="mt-2 p-4 bg-white rounded-xl shadow-md"
+                              onClick={() => navigate(`/books/${donation.id}`)}
+                            >
+                              {donation.book.title}
+                            </div>
+                          ))}
+                      </ul>
+                      <div className="mt-4 text-base font-semibold">
+                        Requests
+                      </div>
+                      <ul>
+                        {userRequest &&
+                          userRequest.map((request, index) => (
+                            <div
+                              key={index}
+                              className="mt-2 p-4 bg-white rounded-xl shadow-md"
+                            >
+                              {request}
+                            </div>
+                          ))}
+                      </ul>
+                      <div className="mt-4">
+                        <LogoutButton />
+                      </div>
                     </div>
                   </div>
                 </Dialog.Panel>
