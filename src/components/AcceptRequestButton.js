@@ -1,7 +1,8 @@
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-export default function AcceptRequestButton({ requesterId, bookId }) {
-  console.log(requesterId, bookId);
+export default function AcceptRequestButton({ requesterId }) {
+  const { bookId } = useParams();
   const handleSubmit = async () => {
     try {
       await axios.post(`${process.env.REACT_APP_BACKEND_URL}/requests/accept`, {

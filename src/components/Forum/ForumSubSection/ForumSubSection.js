@@ -67,7 +67,7 @@ export default function ForumSubSection() {
         />
       </div>
 
-      <div className="flex flex-col border-2 border-neutral rounded-md my-5">
+      <div className="max-w-md sm:max-w-full flex flex-col border-2 border-neutral rounded-md my-5">
         <div className="flex border-b-2 border-neutral justify-between">
           <b className="pl-2">Post Title</b>
           <div className="sm:w-1/3 w-1/2 pr-2 flex justify-between">

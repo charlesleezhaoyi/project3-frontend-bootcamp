@@ -15,7 +15,7 @@ const SingleBook = () => {
   const [, setErrorMessage] = useOutletContext();
   const [bookData, setbookData] = useState(null);
   const [isLoadingData, setIsLoadingData] = useState(true);
-  const [categoriesName, setCategoriesName] = useState(null);
+  const [categoriesName, setCategoriesName] = useState([]);
   const [photoURLs, setPhotoURLs] = useState([]);
   const [requests, setRequests] = useState([]);
   const [isBookByDonor, setIsBookByDonor] = useState(false);
@@ -72,6 +72,10 @@ const SingleBook = () => {
     <Request setErrorMessage={setErrorMessage} />
   );
 
+  const categoriesDisplay = categoriesName.map((category, i) => (
+    <b key={i}>{category}</b>
+  ));
+
   return isLoadingData ? (
     <Loading />
   ) : (
@@ -87,7 +91,9 @@ const SingleBook = () => {
           <tbody>
             <tr>
               <th>Category:</th>
-              <td>{categoriesName}</td>
+              <td className="flex flex-wrap justify-between">
+                {categoriesDisplay}
+              </td>
             </tr>
             <tr>
               <th>Title:</th>
@@ -127,7 +133,7 @@ const SingleBook = () => {
         </div>
       </div>
       {isBookByDonor ? (
-        <RequestList book={bookData} requests={requests} />
+        <RequestList requests={requests} />
       ) : (
         nonDonorRequestDisplay
       )}

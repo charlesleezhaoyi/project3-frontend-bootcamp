@@ -48,7 +48,7 @@ const Home = () => {
   // }, []);
 
   return (
-    <div>
+    <div className="w-full">
       {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
       <SearchBar />
       {categories ? (

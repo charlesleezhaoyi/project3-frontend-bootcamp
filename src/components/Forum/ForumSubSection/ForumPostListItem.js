@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import OutputUserName from "../../Common/OutputUserName";
 
 export default function ForumPostListItem({ post }) {
-  const authorName = post.author.firstName
-    ? `${post.author.firstName} ${post.author.lastName}`
-    : post.author.email.split("@")[0];
+  const authorName = OutputUserName(post.author);
+
   return (
     <Link
       to={`/forum/posts/${post.id}`}

@@ -3,6 +3,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Loading from "../../Common/Loading";
+import OutputUserName from "../../Common/OutputUserName";
 
 export default function SectionColumn({ category, sort, setErrorMessage }) {
   const [postData, setPostData] = useState(null);
@@ -26,11 +27,8 @@ export default function SectionColumn({ category, sort, setErrorMessage }) {
     getPostData();
   }, [setErrorMessage, sort, category.name]);
 
-  const authorName =
-    postData &&
-    (postData.author.firstName
-      ? `${postData.author.firstName} ${postData.author.lastName}`
-      : postData.author.email.split("@")[0]);
+  const authorName = postData && OutputUserName(postData.author);
+
   const postDataDisplay = postData ? (
     <Link
       to={`/forum/posts/${postData.id}`}
