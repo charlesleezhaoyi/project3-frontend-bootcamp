@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { BACKEND_URL } from "../../constants";
 
 const SearchBar = ({ searchParams, setSearchParams }) => {
+  searchBooks = async (searchParams) => {
+    const res = await axios.get(`${BACKEND_URL}/books/search/${searchParams}`);
+  };
+
   return (
     <form className="flex items-center max-w-md mx-auto bg-white rounded-full border border-gray-200">
       <input
@@ -14,6 +20,7 @@ const SearchBar = ({ searchParams, setSearchParams }) => {
       <button
         type="submit"
         className="flex items-center justify-center w-12 h-12 text-white rounded-full bg-blue-500 hover:bg-blue-600 focus:outline-none"
+        onClick={(e) => searchBooks(e.target.value)}
       >
         <svg
           className="w-6 h-6"

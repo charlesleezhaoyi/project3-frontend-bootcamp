@@ -15,26 +15,12 @@ const Settings = ({ open, setOpen }) => {
   console.log(user.user.email);
   const [userDonation, setUserDonation] = useState();
   const [userRequest, setUserRequest] = useState();
-  // const [userfirstName, setUserFirstName] = useState();
-
-  // const accessToken = getAccessTokenSilently({
-  //   audience: process.env.REACT_APP_AUDIENCE,
-  //   scope: "read:current_user",
-  // });
-
-  // const user = {
-  //   firstName: "John",
-  //   lastName: "Doe",
-  //   donations: ["Donation 1", "Donation 2", "Donation 3"],
-  //   requests: ["Request 1", "Request 2", "Request 3"],
-  // };
 
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/donations/user/${user.user.email}`)
       .then((res) => {
         setUserDonation(res.data);
-        console.log(res.data);
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
@@ -46,7 +32,6 @@ const Settings = ({ open, setOpen }) => {
       .get(`${BACKEND_URL}/requests/user/${user.user.email}`)
       .then((res) => {
         setUserRequest(res.data);
-        console.log(res.data);
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
