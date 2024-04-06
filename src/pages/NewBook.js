@@ -80,10 +80,13 @@ const NewBook = () => {
           throw new Error("Please fill out the form.");
         }
       }
-      data.email = user.email;
       if (!selectedCategories.length) {
         throw new Error("Please choose at least one category");
       }
+      if (!photoArr.length) {
+        throw new Error("Please upload at least one photo");
+      }
+      data.email = user.email;
       data.categories = selectedCategories.map((item) => item.label);
 
       const formData = new FormData();
