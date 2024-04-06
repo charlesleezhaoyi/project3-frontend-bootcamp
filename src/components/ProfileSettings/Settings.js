@@ -93,9 +93,9 @@ const Settings = ({ open, setOpen, setErrorMessage }) => {
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
                       <div className="text-lg font-semibold">
-                        {userData
+                        {userData && userData.firstName
                           ? `${userData.firstName} ${userData.lastName}`
-                          : null}
+                          : "No Name Yet"}
                       </div>
                       <div className="mt-4 text-base font-semibold">
                         Donations
