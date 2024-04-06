@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
-// import ErrorAlert from "../components/Common/ErrorAlert";
+import ErrorAlert from "../components/Common/ErrorAlert";
 import CategoryRanking from "../components/Common/CategoryRanking";
 import axios from "axios";
 import { BACKEND_URL } from "../constants";
@@ -12,7 +12,7 @@ const Onboarding = () => {
   const { email } = user;
   const navigate = useNavigate();
 
-  // const [errorAlert, setErrorAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -33,13 +33,11 @@ const Onboarding = () => {
     console.log(isAuthenticated, user.email_verified);
     // The isAuthenticated check and the rest of the logic should be inside this function.
     if (isAuthenticated) {
-      // if (!user.email_verified) {
-      //   setErrorAlert(
-      //     <ErrorAlert message="Please verify your email address." />
-      //   );
-      //   // Add a return statement here to stop execution if the email is not verified.
-      //   //return;
-      // }
+      if (!user.email_verified) {
+        setErrorAlert(
+          <ErrorAlert message="Please verify your email address." />
+        );
+      }
       try {
         const { firstName, lastName, phone } = formData;
 
