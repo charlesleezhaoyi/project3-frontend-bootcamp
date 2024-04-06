@@ -16,7 +16,7 @@ export default function Forum() {
   return isLoading || !isAuthenticated ? (
     <Loading />
   ) : (
-    <div className="flex flex-col items-center">
+    <div className="w-full flex flex-col items-center">
       <ForumNavBar />
       <Outlet context={[errorMessage, setErrorMessage]} />
     </div>
