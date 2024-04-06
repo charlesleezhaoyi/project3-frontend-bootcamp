@@ -12,12 +12,12 @@ import Forum from "./components/Forum/Forum";
 import ForumMainPage from "./components/Forum/ForumMain/ForumMainPage";
 import ForumCreatePost from "./components/Forum/ForumCreatePost";
 import Onboarding from "./pages/OnboardingForm";
-// import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection";
+import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection";
 import ForumPost from "./components/Forum/ForumPost/ForumPost";
 import NewBook from "./pages/NewBook";
 import SingleBook from "./pages/SingleBook";
-import BookList from "./components/Dashboard/BookList";
-import CategoryList from "./components/Dashboard/CategoryList";
+// import BookList from "./components/Dashboard/BookList";
+// import CategoryList from "./components/Dashboard/CategoryList";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -48,13 +48,12 @@ root.render(
               </AuthWrapper>
             }
           />
-
           <Route path="/create-newbook" element={<NewBook />} />
           <Route path="/books/:id" element={<SingleBook />} />
           <Route path="/forum" element={<Forum />}>
             <Route path="" element={<ForumMainPage />} />
             <Route path="create/post" element={<ForumCreatePost />} />
-            {/* <Route path="categories/:category" element={<ForumSubSection />} /> */}
+            <Route path="categories/:category" element={<ForumSubSection />} />
             <Route path="posts/:postId" element={<ForumPost />} />
           </Route>
           {/* <Route path="*" element={"Nothing here!"} /> */}

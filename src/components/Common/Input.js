@@ -10,7 +10,7 @@ export const TextInput = ({ label, type, onChange, placeholder, value }) => {
         <input
           type={type}
           placeholder={placeholder}
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full max-w-xs border border-neutral"
           onChange={onChange}
           value={value}
         />
@@ -27,7 +27,7 @@ export const TextArea = ({ label, onChange, placeholder, value }) => {
           <span className="label-text">{label}</span>
         </div>
         <textarea
-          className="input input-bordered h-24 "
+          className="input input-bordered h-24 border border-neutral"
           placeholder={placeholder}
           onChange={onChange}
           value={value}
@@ -42,7 +42,7 @@ export const FileInput = ({ onChange }) => {
     <>
       <input
         type="file"
-        className="file-input file-input-bordered w-full max-w-xs"
+        className="file-input file-input-bordered w-full max-w-xs border border-neutral"
         onChange={onChange}
       />
     </>
