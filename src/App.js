@@ -8,7 +8,9 @@ function App() {
   const location = useLocation();
   return (
     <div className="App">
-      {!location.pathname.includes("forum") && <NavBar />}
+      {!location.pathname.includes("forum") && (
+        <NavBar setErrorMessage={setErrorMessage} />
+      )}
       <Outlet context={[errorMessage, setErrorMessage]} />
       <ErrorPopUp
         errorMessage={errorMessage}

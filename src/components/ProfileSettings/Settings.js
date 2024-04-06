@@ -1,40 +1,40 @@
-import { Fragment, useEffect } from "react";
-import { useState, useContext } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { BACKEND_URL } from "../../constants";
 import LogoutButton from "../LogoutButton";
-import { Auth0Context, useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
-const Settings = ({ open, setOpen }) => {
+const Settings = ({ open, setOpen, setErrorMessage }) => {
   const navigate = useNavigate();
   const { user } = useAuth0();
-  const [userDonation, setUserDonation] = useState();
-  const [userRequest, setUserRequest] = useState();
+  const [userData, setUserData] = useState(null);
+  const [userDonation, setUserDonation] = useState([]);
+  const [userRequest, setUserRequest] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`${BACKEND_URL}/donations/user/${user.email}`)
-      .then((res) => {
-        setUserDonation(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-      });
-  }, [user.email]);
-
-  useEffect(() => {
-    axios
-      .get(`${BACKEND_URL}/requests/user/${user.email}`)
-      .then((res) => {
-        setUserRequest(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-      });
-  }, [user.email]);
+    const getData = async () => {
+      try {
+        const userDataRes = await axios.get(
+          `${BACKEND_URL}/users/${user.email}`
+        );
+        setUserData(userDataRes.data);
+        const donationsRes = await axios.get(
+          `${BACKEND_URL}/donations/user/${user.email}`
+        );
+        setUserDonation(donationsRes.data);
+        const requestRes = await axios.get(
+          `${BACKEND_URL}/requests/user/${user.email}`
+        );
+        setUserRequest(requestRes.data);
+      } catch (error) {
+        setErrorMessage(error.message);
+      }
+    };
+    getData();
+  }, [user.email, setErrorMessage]);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -93,7 +93,9 @@ const Settings = ({ open, setOpen }) => {
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
                       <div className="text-lg font-semibold">
-                        {user.firstName} {user.lastName}
+                        {userData
+                          ? `${userData.firstName} ${userData.lastName}`
+                          : null}
                       </div>
                       <div className="mt-4 text-base font-semibold">
                         Donations
@@ -120,7 +122,7 @@ const Settings = ({ open, setOpen }) => {
                               key={index}
                               className="mt-2 p-4 bg-white rounded-xl shadow-md"
                             >
-                              {request}
+                              {request.donation.book.title}
                             </div>
                           ))}
                       </ul>
