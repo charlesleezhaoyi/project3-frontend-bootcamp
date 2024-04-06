@@ -4,43 +4,40 @@ import { BACKEND_URL } from "../constants.js";
 import axios from "axios";
 import Request from "../components/Request";
 import { useAuth0 } from "@auth0/auth0-react";
-import Acceptance from "../components/Acceptance.js";
+import RequestList from "../components/RequestList.js";
 
 const SingleBook = () => {
   const [loadBook, setLoadBook] = useState({});
   const [categories, setCategories] = useState([]);
   const [categoryNames, setCategoryNames] = useState({});
-  const [email, setEmail] = useState([]);
+  const [email, setEmail] = useState(null);
   const [isBookByDonor, setIsBookByDonor] = useState(false);
-  const { user } = useAuth0();
+  const { user, isLoading } = useAuth0();
 
   const { id } = useParams();
 
   useEffect(() => {
-    if (id) {
+    if (id && !isLoading) {
       const getBook = async () => {
         const singleBook = await axios.get(`${BACKEND_URL}/books/${id}`);
-        const donations = await axios.get(`${BACKEND_URL}/donations/${id}`);
-        const donorEmail = donations.data.email;
-        setEmail(donorEmail);
         const booksData = singleBook.data;
+        setLoadBook(booksData);
+        const donorEmailRes = await axios.get(
+          `${BACKEND_URL}/donations/donor/${id}`
+        );
+        setEmail(donorEmailRes.data);
         const bookCategories = booksData.categories;
         setCategories(bookCategories);
-        setLoadBook(booksData);
       };
       getBook();
     }
-  }, [id]);
-
-  console.log(email);
-  console.log(user.email);
-  console.log(isBookByDonor);
+  }, [id, isLoading]);
 
   useEffect(() => {
-    if (email === user.email) {
+    if (!isLoading && email === user.email) {
       setIsBookByDonor(true);
     }
-  }, [email]);
+  }, [email, user.email, isLoading]);
 
   useEffect(() => {
     if (categories) {
@@ -70,7 +67,7 @@ const SingleBook = () => {
             <div>Gallery: {}</div>
           </form>
           <div>
-            {isBookByDonor ? <Acceptance book={loadBook} /> : <Request />}
+            {isBookByDonor ? <RequestList book={loadBook} /> : <Request />}
           </div>
         </div>
       </div>
