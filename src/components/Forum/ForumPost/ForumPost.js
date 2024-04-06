@@ -14,6 +14,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ForumComment from "./ForumComment";
 import ForumNameAndDate from "./ForumNameAndDate";
 import ForumCreateComment from "./ForumCreateComment";
+import Loading from "../../Common/Loading";
 
 export default function ForumPost() {
   const [postData, setPostData] = useState(null);
@@ -141,11 +142,7 @@ export default function ForumPost() {
         <ArrowBackOutlinedIcon fontSize="large" />
       </button>
       <div className="w-full border-2 border-neutral rounded-md mb-20">
-        {postData ? (
-          postDataDisplay
-        ) : (
-          <span className="loading loading-dots loading-lg"></span>
-        )}
+        {postData ? postDataDisplay : <Loading />}
       </div>
       <ForumCreateComment
         postId={postId}

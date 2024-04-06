@@ -1,7 +1,7 @@
+import OutputUserName from "../../Common/OutputUserName";
+
 export default function ForumNameAndDate({ user, date }) {
-  const userName = user.firstName
-    ? `${user.firstName} ${user.lastName}`
-    : user.email.split("@")[0];
+  const userName = OutputUserName(user);
 
   const createdAt = new Date(date);
   return (

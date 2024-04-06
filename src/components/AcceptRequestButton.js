@@ -1,17 +1,26 @@
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-export default function AcceptRequestButton({ requesterId, bookId }) {
-  console.log(requesterId, bookId);
+export default function AcceptRequestButton({
+  requesterId,
+  disabled,
+  setErrorMessage,
+}) {
+  const { bookId } = useParams();
   const handleSubmit = async () => {
     try {
       await axios.post(`${process.env.REACT_APP_BACKEND_URL}/requests/accept`, {
         beneId: requesterId,
         bookId: bookId,
       });
+      window.location.reload();
     } catch (error) {
-      console.log(error);
-      //need to change later
+      setErrorMessage(error.message);
     }
   };
-  return <button onClick={handleSubmit}>Accept</button>;
+  return (
+    <button className="btn" disabled={disabled} onClick={handleSubmit}>
+      Accept
+    </button>
+  );
 }

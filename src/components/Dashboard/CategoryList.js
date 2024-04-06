@@ -1,4 +1,4 @@
-export default function CategoryList({ categories, setCategory }) {
+export default function CategoryList({ categories, handleChangeCategory }) {
   return (
     // <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 border border-black">
     <div className="mx-auto py-4 lg:py-8">
@@ -7,7 +7,7 @@ export default function CategoryList({ categories, setCategory }) {
       <div className="my-9 grid grid-cols-3 gap-6">
         {categories.map((category) => (
           <div key={category.name} className="group relative">
-            <button onClick={() => setCategory(category.name)}>
+            <button onClick={() => handleChangeCategory(category.name)}>
               <span className="absolute inset-0" />
               {category.name}
             </button>

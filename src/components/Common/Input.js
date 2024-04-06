@@ -49,7 +49,7 @@ export const FileInput = ({ onChange }) => {
   );
 };
 
-export const SelectInput = ({ value, onChange, selectedCategories }) => {
+export const SelectInput = ({ value, onChange }) => {
   const categoryOptions = value.map((category) => ({
     value: category.id,
     label: category.name,
@@ -67,7 +67,13 @@ export const SelectInput = ({ value, onChange, selectedCategories }) => {
           isMulti
           options={categoryOptions}
           onChange={onChange}
-          value={selectedCategories}
+          styles={{
+            control: (baseStyle) => ({
+              ...baseStyle,
+              background: "oklch(var(--b1))",
+              border: "2px solid oklch(var(--b3))",
+            }),
+          }}
         />
       </label>
     </>
