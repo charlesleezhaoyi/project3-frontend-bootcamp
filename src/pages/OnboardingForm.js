@@ -42,7 +42,7 @@ const Onboarding = () => {
         const { firstName, lastName, phone } = formData;
 
         const userObj = {
-          userEmail: email,
+          email: email,
           firstName: firstName,
           lastName: lastName,
           phone: phone,
