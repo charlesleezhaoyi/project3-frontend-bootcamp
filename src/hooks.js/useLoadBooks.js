@@ -7,7 +7,7 @@ const useLoadBooks = () => {
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const res = await axios.get(`${BACKEND_URL}/books`);
+      const res = await axios.get(`${BACKEND_URL}/books/`);
       const booksData = res.data;
       setBooks(booksData);
     };

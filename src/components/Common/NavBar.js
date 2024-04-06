@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Settings from ".././ProfileSettings/Settings";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function NavBar() {
   const [slideOverOpen, setSlideOverOpen] = useState(false);
+  const { user } = useAuth0();
 
   return (
     <div className="navbar border-b-2 border-b-2 py-6">
@@ -18,7 +20,7 @@ export default function NavBar() {
         <Link className="btn btn-ghost" onClick={() => setSlideOverOpen(true)}>
           <AccountCircleOutlinedIcon fontSize="large" />
         </Link>
-        <Settings open={slideOverOpen} setOpen={setSlideOverOpen} />
+        {user && <Settings open={slideOverOpen} setOpen={setSlideOverOpen} />}
       </div>
     </div>
   );

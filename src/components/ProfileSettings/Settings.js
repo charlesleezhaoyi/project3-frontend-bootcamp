@@ -5,38 +5,36 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { BACKEND_URL } from "../../constants";
 import LogoutButton from "../LogoutButton";
-import { Auth0Context } from "@auth0/auth0-react";
+import { Auth0Context, useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 
 const Settings = ({ open, setOpen }) => {
   const navigate = useNavigate();
-  const user = useContext(Auth0Context);
-  console.log(user);
-  console.log(user.user.email);
+  const { user } = useAuth0();
   const [userDonation, setUserDonation] = useState();
   const [userRequest, setUserRequest] = useState();
 
   useEffect(() => {
     axios
-      .get(`${BACKEND_URL}/donations/user/${user.user.email}`)
+      .get(`${BACKEND_URL}/donations/user/${user.email}`)
       .then((res) => {
         setUserDonation(res.data);
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  }, []);
+  }, [user.email]);
 
   useEffect(() => {
     axios
-      .get(`${BACKEND_URL}/requests/user/${user.user.email}`)
+      .get(`${BACKEND_URL}/requests/user/${user.email}`)
       .then((res) => {
         setUserRequest(res.data);
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  }, []);
+  }, [user.email]);
 
   return (
     <Transition.Root show={open} as={Fragment}>
