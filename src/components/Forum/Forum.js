@@ -1,5 +1,4 @@
 import { Outlet, useOutletContext } from "react-router-dom";
-import ForumNavBar from "./ForumNavBar";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Loading from "../Common/Loading";
@@ -16,8 +15,7 @@ export default function Forum() {
   return isLoading || !isAuthenticated ? (
     <Loading />
   ) : (
-    <div className="flex flex-col items-center">
-      <ForumNavBar />
+    <div className="w-full flex flex-col items-center">
       <Outlet context={[errorMessage, setErrorMessage]} />
     </div>
   );

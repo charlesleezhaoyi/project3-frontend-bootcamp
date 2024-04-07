@@ -1,13 +1,8 @@
 import React from "react";
 import AcceptRequestButton from "./AcceptRequestButton";
 import OutputUserName from "../components/Common/OutputUserName";
-const statusStyle = {
-  pending: "bg-base-300",
-  accepted: "bg-success",
-  rejected: "bg-error",
-  cancelled: "bg-warning",
-  collected: "bg-success",
-};
+import { STATUS_STYLE } from "../constants";
+
 const sortingRef = {
   accepted: 1,
   collected: 1,
@@ -17,10 +12,9 @@ const sortingRef = {
 };
 
 const RequestList = ({ requests, setErrorMessage }) => {
-  const isAllButtonDisabled = requests.find(
-    (request) => request.status === "accepted" || request.status === "collected"
-  );
   requests.sort((a, b) => sortingRef[a.status] - sortingRef[b.status]);
+  const isAllButtonDisabled =
+    requests[0].status === "accepted" || requests[0].status === "collected";
   const requestDisplay = requests.map((request) => {
     const requesterName = OutputUserName(request.bene);
     const isButtonDisabled =
@@ -34,9 +28,7 @@ const RequestList = ({ requests, setErrorMessage }) => {
       >
         <div className="flex justify-between mb-2">
           <b className="text-lg">{requesterName}:</b>
-          <b className={`p-2 text-sm rounded ${statusStyle[request.status]}`}>
-            {request.status}
-          </b>
+          <b className={STATUS_STYLE[request.status]}>{request.status}</b>
         </div>
         <div className="flex justify-between items-center space-x-10">
           <div className="border-accent border-2 rounded w-full h-32 sm:h-20 overflow-y-scroll">
