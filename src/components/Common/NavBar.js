@@ -11,7 +11,11 @@ export default function NavBar({ setErrorMessage }) {
   const location = useLocation();
 
   return (
-    <div className="navbar border-b-2 border-primary py-6 sticky top-0 z-50 bg-base-100">
+    <div
+      className={`navbar py-6 bg-base-10 ${
+        slideOverOpen ? "sticky top-0" : "z-50"
+      }`}
+    >
       <div className="navbar-start space-x-3">
         <Link to="/home" className="btn btn-ghost">
           <HomeOutlinedIcon fontSize="large" />
