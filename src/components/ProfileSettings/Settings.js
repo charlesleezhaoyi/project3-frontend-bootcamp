@@ -111,7 +111,7 @@ const Settings = ({ open, setOpen, setErrorMessage }) => {
                         setOpen={setOpen}
                       />
                     </div>
-                    <div className="mt-4">
+                    <div className="m-4">
                       <LogoutButton />
                     </div>
                   </div>

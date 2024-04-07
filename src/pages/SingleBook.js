@@ -67,6 +67,7 @@ const SingleBook = () => {
   const nonDonorRequestDisplay = isBeneRequested ? (
     <RequestStatus
       request={requests.find((request) => request.bene.email === user.email)}
+      setErrorMessage={setErrorMessage}
     />
   ) : (
     <Request setErrorMessage={setErrorMessage} />
