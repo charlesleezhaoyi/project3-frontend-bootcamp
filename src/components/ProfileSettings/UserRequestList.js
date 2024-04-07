@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
-import { Link } from "react-router-dom";
+import UserRequestListItem from "./UserRequestListItem";
 
 export default function UserRequestList({ setOpen, setErrorMessage }) {
   const { user } = useAuth0();
@@ -22,18 +22,14 @@ export default function UserRequestList({ setOpen, setErrorMessage }) {
   }, [user.email, setErrorMessage]);
 
   return (
-    <div className="flex flex-col">
-      {userRequests &&
-        userRequests.map((request, index) => (
-          <Link
-            to={`/books/${request.donation.bookId}`}
-            key={index}
-            className="mt-2 p-4 bg-white rounded-xl shadow-md"
-            onClick={() => setOpen(false)}
-          >
-            {request.donation.book.title}
-          </Link>
-        ))}
+    <div className="flex flex-col space-y-2">
+      {userRequests.map((request) => (
+        <UserRequestListItem
+          key={request.donationId}
+          request={request}
+          setOpen={setOpen}
+        />
+      ))}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
-import { Link } from "react-router-dom";
+import UserDonationListItem from "./UserDonationListItem";
 
 export default function UserDonationList({ setOpen, setErrorMessage }) {
   const { user } = useAuth0();
@@ -23,18 +23,14 @@ export default function UserDonationList({ setOpen, setErrorMessage }) {
   }, [user.email, setErrorMessage]);
 
   return (
-    <div className="flex flex-col">
-      {userDonations &&
-        userDonations.map((donation, index) => (
-          <Link
-            to={`/books/${donation.bookId}`}
-            key={index}
-            className="mt-2 p-4 bg-white rounded-xl shadow-md"
-            onClick={() => setOpen(false)}
-          >
-            {donation.book.title}
-          </Link>
-        ))}
+    <div className="flex flex-col space-y-2">
+      {userDonations.map((donation) => (
+        <UserDonationListItem
+          key={donation.bookId}
+          donation={donation}
+          setOpen={setOpen}
+        />
+      ))}
     </div>
   );
 }

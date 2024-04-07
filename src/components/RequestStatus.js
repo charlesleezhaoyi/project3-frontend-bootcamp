@@ -39,11 +39,7 @@ export default function RequestStatus({ request, setErrorMessage }) {
           <tr>
             <th>Status:</th>
             <td>
-              <span
-                className={`p-2 text-sm rounded ${
-                  STATUS_STYLE[request.status]
-                }`}
-              >
+              <span className={STATUS_STYLE[request.status]}>
                 {request.status}
               </span>
             </td>

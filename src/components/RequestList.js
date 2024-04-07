@@ -28,9 +28,7 @@ const RequestList = ({ requests, setErrorMessage }) => {
       >
         <div className="flex justify-between mb-2">
           <b className="text-lg">{requesterName}:</b>
-          <b className={`p-2 text-sm rounded ${STATUS_STYLE[request.status]}`}>
-            {request.status}
-          </b>
+          <b className={STATUS_STYLE[request.status]}>{request.status}</b>
         </div>
         <div className="flex justify-between items-center space-x-10">
           <div className="border-accent border-2 rounded w-full h-32 sm:h-20 overflow-y-scroll">
