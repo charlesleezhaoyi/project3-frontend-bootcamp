@@ -19,7 +19,11 @@ export default function AcceptRequestButton({
     }
   };
   return (
-    <button className="btn" disabled={disabled} onClick={handleSubmit}>
+    <button
+      className="btn btn-success"
+      disabled={disabled}
+      onClick={handleSubmit}
+    >
       Accept
     </button>
   );

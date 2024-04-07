@@ -1,39 +1,29 @@
 import { Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { BACKEND_URL } from "../../constants";
 import LogoutButton from "../LogoutButton";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import UserDonationList from "./UserDonationList";
+import UserRequestList from "./UserRequestList";
 
 const Settings = ({ open, setOpen, setErrorMessage }) => {
-  const navigate = useNavigate();
   const { user } = useAuth0();
   const [userData, setUserData] = useState(null);
-  const [userDonation, setUserDonation] = useState([]);
-  const [userRequest, setUserRequest] = useState([]);
 
   useEffect(() => {
-    const getData = async () => {
+    const getUserData = async () => {
       try {
         const userDataRes = await axios.get(
           `${BACKEND_URL}/users/${user.email}`
         );
         setUserData(userDataRes.data);
-        const donationsRes = await axios.get(
-          `${BACKEND_URL}/donations/user/${user.email}`
-        );
-        setUserDonation(donationsRes.data);
-        const requestRes = await axios.get(
-          `${BACKEND_URL}/requests/user/${user.email}`
-        );
-        setUserRequest(requestRes.data);
       } catch (error) {
         setErrorMessage(error.message);
       }
     };
-    getData();
+    getUserData();
   }, [user.email, setErrorMessage]);
 
   return (
@@ -85,50 +75,44 @@ const Settings = ({ open, setOpen, setErrorMessage }) => {
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                  <div className="flex h-full flex-col overflow-y-scroll bg-base-300 py-6 shadow-xl">
                     <div className="px-4 sm:px-6">
                       <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
                         About You
                       </Dialog.Title>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      <div className="text-lg font-semibold">
-                        {userData && userData.firstName
-                          ? `${userData.firstName} ${userData.lastName}`
-                          : "No Name Yet"}
+                    <div className="border-b-2 border-neutral pb-6">
+                      <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                        <div>Name:</div>
+                        <div className="text-lg font-semibold">
+                          {userData && userData.firstName
+                            ? `${userData.firstName} ${userData.lastName}`
+                            : "No Name Yet"}
+                        </div>
+                        <div>Email:</div>
+                        <div className="text-lg font-semibold">
+                          {userData && userData.email}
+                        </div>
                       </div>
+                    </div>
+                    <div className="p-6">
                       <div className="mt-4 text-base font-semibold">
                         Donations
                       </div>
-                      <ul>
-                        {userDonation &&
-                          userDonation.map((donation, index) => (
-                            <div
-                              key={index}
-                              className="mt-2 p-4 bg-white rounded-xl shadow-md"
-                              onClick={() => navigate(`/books/${donation.id}`)}
-                            >
-                              {donation.book.title}
-                            </div>
-                          ))}
-                      </ul>
+                      <UserDonationList
+                        setErrorMessage={setErrorMessage}
+                        setOpen={setOpen}
+                      />
                       <div className="mt-4 text-base font-semibold">
                         Requests
                       </div>
-                      <ul>
-                        {userRequest &&
-                          userRequest.map((request, index) => (
-                            <div
-                              key={index}
-                              className="mt-2 p-4 bg-white rounded-xl shadow-md"
-                            >
-                              {request.donation.book.title}
-                            </div>
-                          ))}
-                      </ul>
-                      <div className="mt-4">
-                        <LogoutButton />
-                      </div>
+                      <UserRequestList
+                        setErrorMessage={setErrorMessage}
+                        setOpen={setOpen}
+                      />
+                    </div>
+                    <div className="m-4">
+                      <LogoutButton />
                     </div>
                   </div>
                 </Dialog.Panel>
