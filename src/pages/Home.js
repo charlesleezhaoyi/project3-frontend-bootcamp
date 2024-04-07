@@ -8,17 +8,19 @@ import useLoadCategories from "../hooks.js/useLoadCategories.js";
 import useLoadBooks from "../hooks.js/useLoadBooks.js";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Loading from "../components/Common/Loading.js";
-// import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
+import NavBar from "../components/Common/NavBar.js";
 
 const Home = () => {
-  const [, setErrorMessage] = useOutletContext();
+  const [errorMessage, setErrorMessage] = useState("");
+  // const [errorMessage, setErrorMessage] = useOutletContext();
   const { categories } = useLoadCategories();
   const { books } = useLoadBooks();
   const [category, setCategory] = useState(null);
   const [bookList, setBookList] = useState([]);
-  // const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +39,7 @@ const Home = () => {
       const filteredBooks = response.data;
       setBookList(filteredBooks);
     } catch (error) {
-      setErrorMessage(error.message);
+      // setErrorMessage(error.message);
     }
   };
 
@@ -48,8 +50,9 @@ const Home = () => {
   // }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full text-center flex flex-col items-center">
       {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
+      <NavBar setErrorMessage={setErrorMessage} />
       <SearchBar />
       {categories ? (
         <div>

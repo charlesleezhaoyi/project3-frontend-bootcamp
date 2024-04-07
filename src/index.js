@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import "./index.css";
-import App from "./App";
+// import App from "./App";
 import Home from "./pages/Home";
 import AuthWrapper from "./components/AuthWrapper";
 import Forum from "./components/Forum/Forum";
@@ -14,6 +14,7 @@ import ForumSubSection from "./components/Forum/ForumSubSection/ForumSubSection"
 import ForumPost from "./components/Forum/ForumPost/ForumPost";
 import NewBook from "./pages/NewBook";
 import SingleBook from "./pages/SingleBook";
+import App from "./App";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -26,7 +27,7 @@ root.render(
   >
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />}>
+        <Route path="/" element={<Home />}>
           <Route
             index
             path="/home"
