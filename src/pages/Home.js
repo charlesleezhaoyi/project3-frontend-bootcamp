@@ -29,6 +29,12 @@ const Home = () => {
     }
   }, [books]);
 
+  useEffect(() => {
+    if (!isAuthenticated || !user.email_verified) {
+      navigate("/onboarding");
+    }
+  }, []);
+
   const handleChangeCategory = async (categoryName) => {
     try {
       setBookList(null);
@@ -43,16 +49,9 @@ const Home = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (!isAuthenticated || !user.email_verified) {
-  //     navigate("/onboarding");
-  //   }
-  // }, []);
-
   return (
     <div className="w-full text-center flex flex-col items-center">
       {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
-      <NavBar setErrorMessage={setErrorMessage} />
       <SearchBar />
       {categories ? (
         <div>

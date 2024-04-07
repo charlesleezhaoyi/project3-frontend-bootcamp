@@ -15,25 +15,27 @@ const Settings = ({ open, setOpen, setErrorMessage }) => {
   const [userRequest, setUserRequest] = useState([]);
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const userDataRes = await axios.get(
-          `${BACKEND_URL}/users/${user.email}`
-        );
-        setUserData(userDataRes.data);
-        const donationsRes = await axios.get(
-          `${BACKEND_URL}/donations/user/${user.email}`
-        );
-        setUserDonation(donationsRes.data);
-        const requestRes = await axios.get(
-          `${BACKEND_URL}/requests/user/${user.email}`
-        );
-        setUserRequest(requestRes.data);
-      } catch (error) {
-        setErrorMessage(error.message);
-      }
-    };
-    getData();
+    if (user) {
+      const getData = async () => {
+        try {
+          const userDataRes = await axios.get(
+            `${BACKEND_URL}/users/${user.email}`
+          );
+          setUserData(userDataRes.data);
+          const donationsRes = await axios.get(
+            `${BACKEND_URL}/donations/user/${user.email}`
+          );
+          setUserDonation(donationsRes.data);
+          const requestRes = await axios.get(
+            `${BACKEND_URL}/requests/user/${user.email}`
+          );
+          setUserRequest(requestRes.data);
+        } catch (error) {
+          setErrorMessage(error.message);
+        }
+      };
+      getData();
+    }
   }, [user.email, setErrorMessage]);
 
   return (

@@ -15,6 +15,7 @@ import ForumPost from "./components/Forum/ForumPost/ForumPost";
 import NewBook from "./pages/NewBook";
 import SingleBook from "./pages/SingleBook";
 import App from "./App";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -27,7 +28,7 @@ root.render(
   >
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}>
+        <Route path="/" element={<App />}>
           <Route
             index
             path="/home"
