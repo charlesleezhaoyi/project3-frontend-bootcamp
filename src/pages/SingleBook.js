@@ -81,7 +81,7 @@ const SingleBook = () => {
   ) : (
     <div className="w-5/6">
       <div className="flex items-center py-5">
-        <button className="btn btn-ghost" onClick={() => navigate(-1)}>
+        <button className="btn btn-ghost" onClick={() => navigate("/home")}>
           <ArrowBackOutlinedIcon fontSize="large" />
         </button>
         <b className="text-2xl">Book Preview:</b>
@@ -90,26 +90,26 @@ const SingleBook = () => {
         <table className="table">
           <tbody>
             <tr>
-              <th>Category:</th>
-              <td className="flex flex-wrap gap-x-5 justify-between">
+              <th className="">Category:</th>
+              <td className="grow flex flex-wrap gap-x-5 justify-between">
                 {categoriesDisplay}
               </td>
             </tr>
             <tr>
               <th>Title:</th>
-              <td>{bookData.title}</td>
+              <td className="text-right">{bookData.title}</td>
             </tr>
             <tr>
               <th>Author:</th>
-              <td> {bookData.author}</td>
+              <td className="text-right"> {bookData.author}</td>
             </tr>
             <tr>
               <th>Relased Year: </th>
-              <td>{bookData.releasedYear}</td>
+              <td className="text-right">{bookData.releasedYear}</td>
             </tr>
             <tr>
               <th>Condition:</th>
-              <td> {bookData.condition}</td>
+              <td className="text-right"> {bookData.condition}</td>
             </tr>
           </tbody>
         </table>

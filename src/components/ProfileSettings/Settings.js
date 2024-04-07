@@ -99,11 +99,17 @@ const Settings = ({ open, setOpen, setErrorMessage }) => {
                       <div className="mt-4 text-base font-semibold">
                         Donations
                       </div>
-                      <UserDonationList setErrorMessage={setErrorMessage} />
+                      <UserDonationList
+                        setErrorMessage={setErrorMessage}
+                        setOpen={setOpen}
+                      />
                       <div className="mt-4 text-base font-semibold">
                         Requests
                       </div>
-                      <UserRequestList setErrorMessage={setErrorMessage} />
+                      <UserRequestList
+                        setErrorMessage={setErrorMessage}
+                        setOpen={setOpen}
+                      />
                     </div>
                     <div className="mt-4">
                       <LogoutButton />

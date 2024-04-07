@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <NavBar setErrorMessage={setErrorMessage} />
-      <div className="w-full border-t-2 border-primary">
+      <div className="w-full border-t-2 border-primary flex flex-col items-center">
         <Outlet context={[errorMessage, setErrorMessage]} />
       </div>
       <ErrorPopUp
