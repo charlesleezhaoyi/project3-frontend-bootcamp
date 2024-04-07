@@ -91,7 +91,7 @@ const SingleBook = () => {
           <tbody>
             <tr>
               <th>Category:</th>
-              <td className="flex flex-wrap justify-between">
+              <td className="flex flex-wrap gap-x-5 justify-between">
                 {categoriesDisplay}
               </td>
             </tr>

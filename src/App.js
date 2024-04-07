@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import ErrorPopUp from "./components/Common/ErrorPopUp";
 import NavBar from "./components/Common/NavBar";
 function App() {
   const [errorMessage, setErrorMessage] = useState("");
-  const location = useLocation();
   return (
     <div className="App">
-      {!location.pathname.includes("forum") && (
-        <NavBar setErrorMessage={setErrorMessage} />
-      )}
+      <NavBar setErrorMessage={setErrorMessage} />
       <Outlet context={[errorMessage, setErrorMessage]} />
       <ErrorPopUp
         errorMessage={errorMessage}
