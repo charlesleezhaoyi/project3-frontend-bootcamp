@@ -39,13 +39,14 @@ const Onboarding = () => {
         );
       }
       try {
-        const { firstName, lastName, phone } = formData;
+        const { firstName, lastName, phone, smsConsent } = formData;
 
         const userObj = {
           email: email,
           firstName: firstName,
           lastName: lastName,
           phone: phone,
+          smsConsent: smsConsent,
         };
         await axios.put(`${BACKEND_URL}/users`, userObj);
         navigate("/home"); // Navigate after successful update
@@ -57,7 +58,10 @@ const Onboarding = () => {
   };
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, type } = event.target;
+    const value =
+      type === "checkbox" ? event.target.checked : event.target.value;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -192,8 +196,8 @@ const Onboarding = () => {
                   <div className="relative flex gap-x-3">
                     <div className="flex h-6 items-center">
                       <input
-                        id="comments"
-                        name="comments"
+                        id="emailnotificationsrequests"
+                        name="emailnotificationsrequests"
                         type="checkbox"
                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                       />
@@ -214,8 +218,8 @@ const Onboarding = () => {
                   <div className="relative flex gap-x-3">
                     <div className="flex h-6 items-center">
                       <input
-                        id="candidates"
-                        name="candidates"
+                        id="emailnotificationsdonations"
+                        name="emailnotificationsdonations"
                         type="checkbox"
                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                       />
@@ -236,53 +240,55 @@ const Onboarding = () => {
               </fieldset>
               <fieldset>
                 <legend className="text-sm font-semibold leading-6 text-gray-900">
-                  Push Notifications
+                  SMS Notifications
                 </legend>
                 <p className="mt-1 text-sm leading-6 text-gray-600">
                   These are delivered via SMS to your mobile phone.
                 </p>
                 <div className="mt-6 space-y-6">
-                  <div className="flex items-center gap-x-3">
-                    <input
-                      id="push-everything"
-                      name="push-notifications"
-                      type="radio"
-                      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                    <label
-                      htmlFor="push-everything"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Everything
-                    </label>
+                  <div className="relative flex gap-x-3">
+                    <div className="flex h-6 items-center">
+                      <input
+                        id="smsConsent"
+                        name="smsConsent"
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="text-sm leading-6">
+                      <label
+                        htmlFor="comments"
+                        className="font-medium text-gray-900"
+                      >
+                        Requests
+                      </label>
+                      <p className="text-gray-500">
+                        Get notified when someones requests to receive your
+                        donated book
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-x-3">
-                    <input
-                      id="push-email"
-                      name="push-notifications"
-                      type="radio"
-                      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                    <label
-                      htmlFor="push-email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Same as email
-                    </label>
-                  </div>
-                  <div className="flex items-center gap-x-3">
-                    <input
-                      id="push-nothing"
-                      name="push-notifications"
-                      type="radio"
-                      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                    <label
-                      htmlFor="push-nothing"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      No push notifications
-                    </label>
+                  <div className="relative flex gap-x-3">
+                    <div className="flex h-6 items-center">
+                      <input
+                        id="smsnotificationdonation"
+                        name="smsnotificationdonation"
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      />
+                    </div>
+                    <div className="text-sm leading-6">
+                      <label
+                        htmlFor="candidates"
+                        className="font-medium text-gray-900"
+                      >
+                        Donations
+                      </label>
+                      <p className="text-gray-500">
+                        Get notified when anyone donates their books
+                      </p>
+                    </div>
                   </div>
                 </div>
               </fieldset>
