@@ -95,7 +95,7 @@ const Settings = ({ open, setOpen, setErrorMessage }) => {
                         </div>
                       </div>
                     </div>
-                    <div>
+                    <div className="p-6">
                       <div className="mt-4 text-base font-semibold">
                         Donations
                       </div>
