@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import ErrorPopUp from "./components/Common/ErrorPopUp";
 import NavBar from "./components/Common/NavBar";
 function App() {
