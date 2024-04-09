@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import ErrorPopUp from "./components/Common/ErrorPopUp";
 import NavBar from "./components/Common/NavBar";
 function App() {
   const [errorMessage, setErrorMessage] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("/home");
+    }
+  }, [location, navigate]);
+
   return (
     <div className="App">
       <NavBar setErrorMessage={setErrorMessage} />
