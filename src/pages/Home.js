@@ -12,16 +12,14 @@ import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Loading from "../components/Common/Loading.js";
 import { useAuth0 } from "@auth0/auth0-react";
-import NavBar from "../components/Common/NavBar.js";
 
 const Home = () => {
-  const [errorMessage, setErrorMessage] = useOutletContext();
+  const [, setErrorMessage] = useOutletContext();
   const { categories } = useLoadCategories();
   const { books } = useLoadBooks();
   const [category, setCategory] = useState(null);
   const [bookList, setBookList] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-
   const { isAuthenticated, user } = useAuth0();
   const navigate = useNavigate();
 
@@ -81,15 +79,15 @@ const Home = () => {
 
   return (
     <div className="w-full text-center flex flex-col items-center">
-      {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
       <SearchBar
         setSearchParams={setSearchParams}
         searchParams={searchParams}
         handleSubmit={handleSubmit}
       />
       {categories ? (
-        <div>
+        <div className="w-full sm:w-5/6">
           <CategoryList
+            selectedCategory={category}
             categories={categories}
             handleChangeCategory={handleChangeCategory}
           />
