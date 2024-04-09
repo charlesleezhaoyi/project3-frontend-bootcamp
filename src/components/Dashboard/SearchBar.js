@@ -1,26 +1,22 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { BACKEND_URL } from "../../constants";
+import React from "react";
 
-const SearchBar = ({ searchParams, setSearchParams }) => {
-  const searchBooks = async (searchParams) => {
-    const res = await axios.get(`${BACKEND_URL}/books/search/${searchParams}`);
-  };
-
+const SearchBar = ({ searchParams, setSearchParams, handleSubmit }) => {
   return (
-    <form className="flex items-center max-w-md mx-auto bg-white rounded-full border border-gray-200">
+    <form
+      className="flex items-center max-w-md mx-auto bg-white rounded-full border border-gray-200"
+      onSubmit={(e) => handleSubmit(e)}
+    >
       <input
         type="search"
         name="search"
         placeholder="Search..."
         className="w-full px-4 py-2 rounded-full focus:outline-none"
-        value={searchParams}
-        onChange={(e) => setSearchParams(e.target.value)}
+        value={searchParams.get("q") || ""}
+        onChange={(e) => setSearchParams({ q: e.target.value })}
       />
       <button
         type="submit"
         className="flex items-center justify-center w-12 h-12 text-white rounded-full bg-blue-500 hover:bg-blue-600 focus:outline-none"
-        onClick={(e) => searchBooks(e.target.value)}
       >
         <svg
           className="w-6 h-6"

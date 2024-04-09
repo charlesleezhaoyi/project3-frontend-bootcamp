@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { BACKEND_URL } from "../constants.js";
 import axios from "axios";
 import BookList from "../components/Dashboard/BookList";
@@ -18,6 +19,8 @@ const Home = () => {
   const { books } = useLoadBooks();
   const [category, setCategory] = useState(null);
   const [bookList, setBookList] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   // const { isAuthenticated, user } = useAuth0();
   const navigate = useNavigate();
 
@@ -42,15 +45,41 @@ const Home = () => {
   };
 
   // useEffect(() => {
+  //   if (searchParams) {
+  //     const getFilteredResults = async () => {
+  //       const response = await axios.get(
+  //         `${BACKEND_URL}/books?${searchParams.toString()}`
+  //       );
+  //       const filteredBooks = response.data;
+  //       setBookList(filteredBooks);
+  //     };
+  //     getFilteredResults();
+  //   }
+  // }, [searchParams]);
+  // useEffect(() => {
   //   if (!isAuthenticated || !user.email_verified) {
   //     navigate("/onboarding");
   //   }
   // }, []);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await axios.get(
+      `${BACKEND_URL}/books/search?${searchParams.toString()}`
+    );
+    const filteredBooks = response.data;
+
+    setBookList(filteredBooks);
+  };
+
   return (
     <div className="w-full">
       {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
-      <SearchBar />
+      <SearchBar
+        setSearchParams={setSearchParams}
+        searchParams={searchParams}
+        handleSubmit={handleSubmit}
+      />
       {categories ? (
         <div>
           <CategoryList
