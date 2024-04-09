@@ -8,14 +8,13 @@ import useLoadCategories from "../hooks.js/useLoadCategories.js";
 import useLoadBooks from "../hooks.js/useLoadBooks.js";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import Loading from "../components/Common/Loading.js";
 import { useAuth0 } from "@auth0/auth0-react";
 import NavBar from "../components/Common/NavBar.js";
 
 const Home = () => {
-  const [errorMessage, setErrorMessage] = useState("");
-  // const [errorMessage, setErrorMessage] = useOutletContext();
+  const [errorMessage, setErrorMessage] = useOutletContext();
   const { categories } = useLoadCategories();
   const { books } = useLoadBooks();
   const [category, setCategory] = useState(null);
@@ -45,7 +44,7 @@ const Home = () => {
       const filteredBooks = response.data;
       setBookList(filteredBooks);
     } catch (error) {
-      // setErrorMessage(error.message);
+      setErrorMessage(error.message);
     }
   };
 
