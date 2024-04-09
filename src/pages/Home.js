@@ -31,11 +31,11 @@ const Home = () => {
     }
   }, [books]);
 
-  useEffect(() => {
-    if (!isAuthenticated || !user.email_verified) {
-      navigate("/onboarding");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isAuthenticated || !user.email_verified) {
+  //     navigate("/onboarding");
+  //   }
+  // }, []);
 
   const handleChangeCategory = async (categoryName) => {
     try {

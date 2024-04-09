@@ -11,9 +11,7 @@ const Onboarding = () => {
   const { isAuthenticated, user } = useAuth0();
   const { email } = user;
   const navigate = useNavigate();
-
   const [errorAlert, setErrorAlert] = useState(false);
-
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -39,7 +37,8 @@ const Onboarding = () => {
         );
       }
       try {
-        const { firstName, lastName, phone, smsConsent } = formData;
+        const { firstName, lastName, phone, smsConsent, emailConsent } =
+          formData;
 
         const userObj = {
           email: email,
@@ -47,6 +46,7 @@ const Onboarding = () => {
           lastName: lastName,
           phone: phone,
           smsConsent: smsConsent,
+          emailConsent: emailConsent,
         };
         await axios.put(`${BACKEND_URL}/users`, userObj);
         navigate("/home"); // Navigate after successful update
@@ -196,10 +196,11 @@ const Onboarding = () => {
                   <div className="relative flex gap-x-3">
                     <div className="flex h-6 items-center">
                       <input
-                        id="emailnotificationsrequests"
-                        name="emailnotificationsrequests"
+                        id="emailConsent"
+                        name="emailConsent"
                         type="checkbox"
                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="text-sm leading-6">
