@@ -1,14 +1,25 @@
 import axios from "axios";
 import { BACKEND_URL, STATUS_STYLE } from "../constants";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function RequestStatus({ request, setErrorMessage }) {
+  const { getAccessTokenSilently } = useAuth0();
   const handleChangeStatus = async (status) => {
     try {
-      await axios.post(`${BACKEND_URL}/requests/status`, {
-        donationId: request.donationId,
-        beneId: request.beneId,
-        status,
-      });
+      const token = await getAccessTokenSilently();
+      await axios.post(
+        `${BACKEND_URL}/requests/status`,
+        {
+          donationId: request.donationId,
+          beneId: request.beneId,
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       window.location.reload();
     } catch (error) {
       setErrorMessage(error.message);

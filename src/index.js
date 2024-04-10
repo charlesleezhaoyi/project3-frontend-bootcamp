@@ -23,7 +23,7 @@ root.render(
     clientId={process.env.REACT_APP_CLIENT_ID}
     redirectUri={`${window.location.origin}/home`}
     audience={process.env.REACT_APP_AUDIENCE}
-    scope="read:current_user update:current_user_metadata"
+    scope="read:current_user"
   >
     <BrowserRouter>
       <Routes>

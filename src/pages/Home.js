@@ -19,7 +19,7 @@ const Home = () => {
   const { books } = useLoadBooks();
   const [category, setCategory] = useState(null);
   const [bookList, setBookList] = useState([]);
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,10 +36,16 @@ const Home = () => {
 
   const handleChangeCategory = async (categoryName) => {
     try {
+      const token = await getAccessTokenSilently();
       setBookList(null);
       setCategory(categoryName);
       const response = await axios.get(
-        `${BACKEND_URL}/books/category/${categoryName}`
+        `${BACKEND_URL}/books/category/${categoryName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const filteredBooks = response.data;
       setBookList(filteredBooks);
@@ -50,7 +56,6 @@ const Home = () => {
 
   return (
     <div className="w-full text-center flex flex-col items-center">
-      {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
       <SearchBar />
       {categories ? (
         <div>
