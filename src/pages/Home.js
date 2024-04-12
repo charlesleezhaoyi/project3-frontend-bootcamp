@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { BACKEND_URL } from "../constants.js";
 import axios from "axios";
 import BookList from "../components/Dashboard/BookList";
@@ -11,15 +12,15 @@ import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Loading from "../components/Common/Loading.js";
 import { useAuth0 } from "@auth0/auth0-react";
-import NavBar from "../components/Common/NavBar.js";
 
 const Home = () => {
-  const [errorMessage, setErrorMessage] = useOutletContext();
+  const [, setErrorMessage] = useOutletContext();
   const { categories } = useLoadCategories();
   const { books } = useLoadBooks();
   const [category, setCategory] = useState(null);
   const [bookList, setBookList] = useState([]);
-  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { isAuthenticated, user } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,11 +29,11 @@ const Home = () => {
     }
   }, [books]);
 
-  useEffect(() => {
-    if (!isAuthenticated || !user.email_verified) {
-      navigate("/onboarding");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isAuthenticated || !user.email_verified) {
+  //     navigate("/onboarding");
+  //   }
+  // }, []);
 
   const handleChangeCategory = async (categoryName) => {
     try {
@@ -54,12 +55,27 @@ const Home = () => {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await axios.get(
+      `${BACKEND_URL}/books/search?${searchParams.toString()}`
+    );
+    const filteredBooks = response.data;
+
+    setBookList(filteredBooks);
+  };
+
   return (
     <div className="w-full text-center flex flex-col items-center">
-      <SearchBar />
+      <SearchBar
+        setSearchParams={setSearchParams}
+        searchParams={searchParams}
+        handleSubmit={handleSubmit}
+      />
       {categories ? (
-        <div>
+        <div className="w-full sm:w-5/6">
           <CategoryList
+            selectedCategory={category}
             categories={categories}
             handleChangeCategory={handleChangeCategory}
           />

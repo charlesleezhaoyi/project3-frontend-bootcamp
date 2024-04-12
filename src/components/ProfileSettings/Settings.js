@@ -7,6 +7,7 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import UserDonationList from "./UserDonationList";
 import UserRequestList from "./UserRequestList";
+import Loading from "../Common/Loading";
 
 const Settings = ({ open, setOpen, setErrorMessage }) => {
   const { user } = useAuth0();
@@ -75,46 +76,50 @@ const Settings = ({ open, setOpen, setErrorMessage }) => {
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="flex h-full flex-col overflow-y-scroll bg-base-300 py-6 shadow-xl">
-                    <div className="px-4 sm:px-6">
-                      <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                        About You
-                      </Dialog.Title>
-                    </div>
-                    <div className="border-b-2 border-neutral pb-6">
-                      <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                        <div>Name:</div>
-                        <div className="text-lg font-semibold">
-                          {userData && userData.firstName
-                            ? `${userData.firstName} ${userData.lastName}`
-                            : "No Name Yet"}
+                  {userData ? (
+                    <div className="flex h-full flex-col overflow-y-scroll bg-base-300 py-6 shadow-xl">
+                      <div className="px-4 sm:px-6">
+                        <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
+                          About You
+                        </Dialog.Title>
+                      </div>
+                      <div className="border-b-2 border-neutral pb-6">
+                        <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                          <div>Name:</div>
+                          <div className="text-lg font-semibold">
+                            {userData && userData.firstName
+                              ? `${userData.firstName} ${userData.lastName}`
+                              : "No Name Yet"}
+                          </div>
+                          <div>Email:</div>
+                          <div className="text-lg font-semibold">
+                            {userData && userData.email}
+                          </div>
                         </div>
-                        <div>Email:</div>
-                        <div className="text-lg font-semibold">
-                          {userData && userData.email}
+                      </div>
+                      <div className="p-6">
+                        <div className="mt-4 text-base font-semibold">
+                          Donations
                         </div>
+                        <UserDonationList
+                          setErrorMessage={setErrorMessage}
+                          setOpen={setOpen}
+                        />
+                        <div className="mt-4 text-base font-semibold">
+                          Requests
+                        </div>
+                        <UserRequestList
+                          setErrorMessage={setErrorMessage}
+                          setOpen={setOpen}
+                        />
+                      </div>
+                      <div className="m-4">
+                        <LogoutButton />
                       </div>
                     </div>
-                    <div className="p-6">
-                      <div className="mt-4 text-base font-semibold">
-                        Donations
-                      </div>
-                      <UserDonationList
-                        setErrorMessage={setErrorMessage}
-                        setOpen={setOpen}
-                      />
-                      <div className="mt-4 text-base font-semibold">
-                        Requests
-                      </div>
-                      <UserRequestList
-                        setErrorMessage={setErrorMessage}
-                        setOpen={setOpen}
-                      />
-                    </div>
-                    <div className="m-4">
-                      <LogoutButton />
-                    </div>
-                  </div>
+                  ) : (
+                    <Loading />
+                  )}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

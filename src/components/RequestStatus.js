@@ -41,7 +41,6 @@ export default function RequestStatus({ request, setErrorMessage }) {
       Collected
     </button>
   );
-  console.log(request);
   return (
     <div className="p-3">
       You have already request this book.
