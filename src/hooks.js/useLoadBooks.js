@@ -12,7 +12,6 @@ const useLoadBooks = () => {
       const token = await getAccessTokenSilently({
         authorizationParams: {
           audience: process.env.REACT_APP_AUDIENCE,
-          scope: "read:current_user",
         },
       });
 
