@@ -14,7 +14,8 @@ const sortingRef = {
 const RequestList = ({ requests, setErrorMessage }) => {
   requests.sort((a, b) => sortingRef[a.status] - sortingRef[b.status]);
   const isAllButtonDisabled =
-    requests[0].status === "accepted" || requests[0].status === "collected";
+    requests.length &&
+    (requests[0].status === "accepted" || requests[0].status === "collected");
   const requestDisplay = requests.map((request) => {
     const requesterName = OutputUserName(request.bene);
     const isButtonDisabled =
@@ -46,7 +47,9 @@ const RequestList = ({ requests, setErrorMessage }) => {
   return (
     <div className="border rounded-lg p-5 space-y-3">
       <div className="font-semibold text-2xl">All beneficiary's requests:</div>
-      <div className="border-2 border-neutral rounded">{requestDisplay}</div>
+      <div className="border-2 border-neutral rounded">
+        {requests.length ? requestDisplay : "No request yet."}
+      </div>
     </div>
   );
 };

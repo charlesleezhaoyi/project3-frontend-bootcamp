@@ -14,15 +14,18 @@ import axios from "axios";
 import useLoadCategories from "../hooks.js/useLoadCategories.js";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import Photo from "../components/Common/Photo.js";
+const defaultInput = {
+  title: "",
+  author: "",
+  description: "",
+  releasedYear: "",
+  review: "",
+  condition: "",
+};
 
 const NewBook = () => {
   const { user } = useAuth0();
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [description, setDescription] = useState("");
-  const [releasedYear, setReleasedYear] = useState("");
-  const [condition, setCondition] = useState("");
-  const [review, setReview] = useState("");
+  const [inputData, setInputData] = useState(defaultInput);
   const [photoArr, setPhotoArr] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const { categories } = useLoadCategories();
@@ -67,14 +70,7 @@ const NewBook = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = {
-        title: title,
-        author: author,
-        description: description,
-        releasedYear: releasedYear,
-        condition: condition,
-        review: review,
-      };
+      const data = { ...inputData };
       for (const subData of Object.values(data)) {
         if (!subData.length) {
           throw new Error("Please fill out the form.");
@@ -116,43 +112,67 @@ const NewBook = () => {
             <TextInput
               label="Book title"
               type="text"
-              onChange={(e) => setTitle(e.target.value)}
-              value={title}
+              onChange={(e) =>
+                setInputData((prev) => {
+                  return { ...prev, title: e.target.value };
+                })
+              }
+              value={inputData.title}
               placeholder="Grumpy Monkey"
             />
             <TextInput
               label="Author"
               type="text"
-              onChange={(e) => setAuthor(e.target.value)}
-              value={author}
+              onChange={(e) =>
+                setInputData((prev) => {
+                  return { ...prev, author: e.target.value };
+                })
+              }
+              value={inputData.author}
               placeholder="Suzanne Lang"
             />
             <TextArea
               label="Description"
               type="text"
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
+              onChange={(e) =>
+                setInputData((prev) => {
+                  return { ...prev, description: e.target.value };
+                })
+              }
+              value={inputData.description}
               placeholder="Could it be that he just needs a day to feel grumpy?"
             />
             <SelectInput value={categories} onChange={handleChange} />
             <TextInput
               label="Released Year"
               type="number"
-              onChange={(e) => setReleasedYear(e.target.value)}
-              value={releasedYear}
+              onChange={(e) =>
+                setInputData((prev) => {
+                  return { ...prev, releasedYear: e.target.value };
+                })
+              }
+              value={inputData.releasedYear}
               placeholder="2018"
             />
             <TextInput
               label="Condition"
               type="text"
-              onChange={(e) => setCondition(e.target.value)}
-              value={condition}
+              onChange={(e) =>
+                setInputData((prev) => {
+                  return { ...prev, condition: e.target.value };
+                })
+              }
+              value={inputData.condition}
               placeholder="New"
             />
             <TextArea
               label="Review"
-              onChange={(e) => setReview(e.target.value)}
-              value={review}
+              onChange={(e) =>
+                setInputData((prev) => {
+                  return { ...prev, review: e.target.value };
+                })
+              }
+              value={inputData.review}
               placeholder="Best book so far!"
             />
           </div>
