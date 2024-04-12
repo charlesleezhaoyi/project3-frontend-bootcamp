@@ -49,24 +49,6 @@ const Home = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (searchParams) {
-  //     const getFilteredResults = async () => {
-  //       const response = await axios.get(
-  //         `${BACKEND_URL}/books?${searchParams.toString()}`
-  //       );
-  //       const filteredBooks = response.data;
-  //       setBookList(filteredBooks);
-  //     };
-  //     getFilteredResults();
-  //   }
-  // }, [searchParams]);
-  // useEffect(() => {
-  //   if (!isAuthenticated || !user.email_verified) {
-  //     navigate("/onboarding");
-  //   }
-  // }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await axios.get(
