@@ -8,12 +8,13 @@ import axios from "axios";
 
 const Request = ({ setErrorMessage }) => {
   const [content, setContent] = useState("");
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const { bookId } = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = await getAccessTokenSilently();
       if (!content.length) {
         throw new Error("Please type in your request content");
       }
@@ -22,7 +23,11 @@ const Request = ({ setErrorMessage }) => {
         bookId: bookId,
         email: user.email,
       };
-      await axios.post(`${BACKEND_URL}/requests`, requestObj);
+      await axios.post(`${BACKEND_URL}/requests`, requestObj, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       window.location.reload();
     } catch (error) {
       setErrorMessage(error.message);

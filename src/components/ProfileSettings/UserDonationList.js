@@ -5,14 +5,19 @@ import { BACKEND_URL } from "../../constants";
 import UserDonationListItem from "./UserDonationListItem";
 
 export default function UserDonationList({ setOpen, setErrorMessage }) {
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [userDonations, setUserDonations] = useState([]);
 
   useEffect(() => {
     const getUserDonationsData = async () => {
       try {
         const donationsRes = await axios.get(
-          `${BACKEND_URL}/donations/user/${user.email}`
+          `${BACKEND_URL}/donations/user/${user.email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${await getAccessTokenSilently()}`,
+            },
+          }
         );
         setUserDonations(donationsRes.data);
       } catch (error) {

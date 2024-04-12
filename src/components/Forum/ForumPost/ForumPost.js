@@ -64,8 +64,8 @@ export default function ForumPost() {
   }, [setErrorMessage, postId, user.email, navigate]);
 
   const handleToggleLike = async (e) => {
+    const token = await getAccessTokenSilently({});
     try {
-      const token = getAccessTokenSilently();
       const { data } = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/posts/like`,
         {

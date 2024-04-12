@@ -5,6 +5,7 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import ForumPostListItem from "./ForumPostListItem";
 import Select from "react-select";
 import Loading from "../../Common/Loading";
+import { useAuth0 } from "@auth0/auth0-react";
 const sortOption = [
   { label: "Popular", value: "popular" },
   { label: "Newest Post", value: "newestPost" },
@@ -17,12 +18,16 @@ export default function ForumSubSection() {
   const [, setErrorMessage] = useOutletContext();
   const { category } = useParams();
   const navigate = useNavigate();
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     const getPostList = async () => {
       try {
+        // const token = await getAccessTokenSilently();
+        // console.log(token);
         const { data } = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/posts/category/${category}?sortBy=${sort}`
+          // { headers: { Authorization: `Bearer ${token}` } }
         );
         setPostList(data);
       } catch (error) {
@@ -30,7 +35,7 @@ export default function ForumSubSection() {
       }
     };
     getPostList();
-  }, [setErrorMessage, sort, category]);
+  }, [setErrorMessage, sort, category, getAccessTokenSilently]);
 
   let postListItems = postList ? (
     postList.map((post) => <ForumPostListItem post={post} key={post.id} />)

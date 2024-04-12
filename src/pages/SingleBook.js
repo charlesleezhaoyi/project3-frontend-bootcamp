@@ -21,13 +21,16 @@ const SingleBook = () => {
   const [isBookByDonor, setIsBookByDonor] = useState(false);
   const [isBeneRequested, setIsBeneRequested] = useState(false);
   const navigate = useNavigate();
-  const { user, isLoading } = useAuth0();
+  const { user, isLoading, getAccessTokenSilently } = useAuth0();
   const { bookId } = useParams();
 
   useEffect(() => {
     const getBookAndRequest = async () => {
       try {
-        const bookRes = await axios.get(`${BACKEND_URL}/books/${bookId}`);
+        const token = await getAccessTokenSilently({});
+        const bookRes = await axios.get(`${BACKEND_URL}/books/${bookId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const { donation, categories, photos, ...incomingBookData } =
           bookRes.data;
         setbookData(incomingBookData);
@@ -37,7 +40,8 @@ const SingleBook = () => {
           photos.map((photo) => convertBufferToPhoto(photo.file.data))
         );
         const requestRes = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/requests/book/${bookId}`
+          `${process.env.REACT_APP_BACKEND_URL}/requests/book/${bookId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setRequests(requestRes.data);
         setIsBeneRequested(

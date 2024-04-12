@@ -34,7 +34,7 @@ export default function ForumCreatePost() {
 
   const handleSubmit = async () => {
     try {
-      const token = getAccessTokenSilently();
+      const token = await getAccessTokenSilently();
       if (!titleInput.length) {
         throw new Error("Title cannot be empty");
       }
@@ -110,7 +110,7 @@ export default function ForumCreatePost() {
           className="btn w-5/6 btn-outline"
           onClick={() => handleSubmit()}
         >
-          Sumbit
+          Submit
         </button>
       </div>
     </div>
