@@ -25,7 +25,7 @@ export default function ForumPost() {
   const navigate = useNavigate();
   const [query] = useSearchParams();
   const { postId } = useParams();
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     if (isNaN(Number(postId))) {
@@ -34,8 +34,10 @@ export default function ForumPost() {
     }
     const getPostData = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const { data } = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/posts/${postId}`
+          `${process.env.REACT_APP_BACKEND_URL}/posts/${postId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         const { comments, ...incomingPostData } = data;
         setCommentList(comments);
@@ -47,8 +49,10 @@ export default function ForumPost() {
     };
     const getIsUserLiked = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const { data } = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/posts/like/${postId}/${user.email}`
+          `${process.env.REACT_APP_BACKEND_URL}/posts/like/${postId}/${user.email}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setIsUserLiked(data);
       } catch (error) {
@@ -61,13 +65,15 @@ export default function ForumPost() {
 
   const handleToggleLike = async (e) => {
     try {
+      const token = getAccessTokenSilently();
       const { data } = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/posts/like`,
         {
           postId,
           userEmail: user.email,
           like: e.target.checked,
-        }
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setIsUserLiked(data);
       setLikeCount((prev) => (data ? prev + 1 : prev - 1));

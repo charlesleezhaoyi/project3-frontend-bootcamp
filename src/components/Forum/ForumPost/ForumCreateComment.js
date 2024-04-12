@@ -13,7 +13,6 @@ export default function ForumCreateComment({
 
   const handleSubmit = async () => {
     const token = await getAccessTokenSilently();
-    console.log(token);
     try {
       if (!input.length) {
         throw new Error("Please type in your comment.");
