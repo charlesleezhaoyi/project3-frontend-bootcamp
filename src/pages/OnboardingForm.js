@@ -9,7 +9,7 @@ import { BACKEND_URL } from "../constants";
 
 const Onboarding = () => {
   const { isAuthenticated, user } = useAuth0();
-  const { email } = user;
+  // const { email } = user;
   const navigate = useNavigate();
   const [errorAlert, setErrorAlert] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,9 +28,9 @@ const Onboarding = () => {
   const handleSaveBtnClick = async (e) => {
     e.preventDefault();
 
-    console.log(isAuthenticated, user.email_verified);
-    // The isAuthenticated check and the rest of the logic should be inside this function.
-    if (isAuthenticated) {
+    console.log(isAuthenticated);
+    console.log(user);
+    if (isAuthenticated && user) {
       if (!user.email_verified) {
         setErrorAlert(
           <ErrorAlert message="Please verify your email address." />
@@ -40,8 +40,20 @@ const Onboarding = () => {
         const { firstName, lastName, phone, smsConsent, emailConsent } =
           formData;
 
+        // Check if all necessary data fields are defined
+        if (
+          !firstName ||
+          !lastName ||
+          !phone ||
+          smsConsent === undefined ||
+          emailConsent === undefined
+        ) {
+          console.error("Missing user data");
+          return;
+        }
+
         const userObj = {
-          email: email,
+          email: user.email,
           firstName: firstName,
           lastName: lastName,
           phone: phone,

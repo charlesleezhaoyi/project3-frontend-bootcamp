@@ -8,17 +8,27 @@ export default function ForumCreateComment({
   setCommentList,
 }) {
   const [isCreateComment, setIsCreateComment] = useState(null);
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [input, setInput] = useState("");
 
   const handleSubmit = async () => {
+    const token = await getAccessTokenSilently();
+    console.log(token);
     try {
       if (!input.length) {
         throw new Error("Please type in your comment.");
       }
       const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/comments/${postId}`,
-        { userEmail: user.email, content: input }
+        {
+          userEmail: user.email,
+          content: input,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setCommentList((prev) => [
         ...prev,

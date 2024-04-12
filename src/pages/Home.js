@@ -12,6 +12,7 @@ import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Loading from "../components/Common/Loading.js";
 import { useAuth0 } from "@auth0/auth0-react";
+import LogoutButton from "../components/LogoutButton.js";
 
 const Home = () => {
   const [, setErrorMessage] = useOutletContext();
@@ -20,7 +21,7 @@ const Home = () => {
   const [category, setCategory] = useState(null);
   const [bookList, setBookList] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,11 +30,11 @@ const Home = () => {
     }
   }, [books]);
 
-  // useEffect(() => {
-  //   if (!isAuthenticated || !user.email_verified) {
-  //     navigate("/onboarding");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!isAuthenticated || !user.email_verified) {
+      navigate("/onboarding");
+    }
+  }, []);
 
   const handleChangeCategory = async (categoryName) => {
     try {
@@ -91,6 +92,9 @@ const Home = () => {
         <button onClick={() => navigate("/forum")}>
           <ForumRoundedIcon fontSize="large" />
         </button>
+        <div className="m-4">
+          <LogoutButton />
+        </div>
       </div>
     </div>
   );

@@ -5,17 +5,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const useLoadBooks = () => {
   const [books, setBooks] = useState([]);
-  const { getAccessTokenSilently, loginWithRedirect } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: process.env.REACT_APP_AUDIENCE,
-        },
-      });
-
-      console.log(token);
+      const token = await getAccessTokenSilently({});
       const res = await axios.get(`${BACKEND_URL}/books/`, {
         headers: {
           Authorization: `Bearer ${token}`,
