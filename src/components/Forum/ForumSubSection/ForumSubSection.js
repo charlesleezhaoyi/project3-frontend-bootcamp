@@ -23,11 +23,8 @@ export default function ForumSubSection() {
   useEffect(() => {
     const getPostList = async () => {
       try {
-        // const token = await getAccessTokenSilently();
-        // console.log(token);
         const { data } = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/posts/category/${category}?sortBy=${sort}`
-          // { headers: { Authorization: `Bearer ${token}` } }
         );
         setPostList(data);
       } catch (error) {
