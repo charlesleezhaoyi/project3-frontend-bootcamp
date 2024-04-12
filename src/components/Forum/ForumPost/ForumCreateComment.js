@@ -13,6 +13,9 @@ export default function ForumCreateComment({
 
   const handleSubmit = async () => {
     try {
+      if (!input.length) {
+        throw new Error("Please type in your comment.");
+      }
       const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/comments/${postId}`,
         { userEmail: user.email, content: input }
