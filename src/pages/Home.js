@@ -34,6 +34,7 @@ const Home = () => {
   useEffect(() => {
     if (!isAuthenticated || !user.email_verified) {
       navigate("/onboarding");
+      // navigate("/home");
     }
   }, []);
 
@@ -51,24 +52,6 @@ const Home = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (searchParams) {
-  //     const getFilteredResults = async () => {
-  //       const response = await axios.get(
-  //         `${BACKEND_URL}/books?${searchParams.toString()}`
-  //       );
-  //       const filteredBooks = response.data;
-  //       setBookList(filteredBooks);
-  //     };
-  //     getFilteredResults();
-  //   }
-  // }, [searchParams]);
-  // useEffect(() => {
-  //   if (!isAuthenticated || !user.email_verified) {
-  //     navigate("/onboarding");
-  //   }
-  // }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await axios.get(
@@ -80,31 +63,26 @@ const Home = () => {
   };
 
   return (
-    <div className="w-full text-center flex flex-col items-center">
-      {/* <SearchBar onSearch={(term) => console.log(term)} /> */}
-      <SearchBar
-        setSearchParams={setSearchParams}
-        searchParams={searchParams}
-        handleSubmit={handleSubmit}
-      />
-      {categories ? (
-        <div>
-          <CategoryList
-            categories={categories}
-            handleChangeCategory={handleChangeCategory}
-          />
-          <BookList bookList={bookList} />
-        </div>
-      ) : (
-        <Loading />
-      )}
-      <div className="flex gap-4 justify-center items-center my-12">
-        <button onClick={() => navigate("/create-newbook")}>
-          <AddCircleOutlineRoundedIcon fontSize="large" />
-        </button>
-        <button onClick={() => navigate("/forum")}>
-          <ForumRoundedIcon fontSize="large" />
-        </button>
+    <div className="grid grid-cols-5 w-screen">
+      <div className="col-start-2 col-span-3 ">
+        <SearchBar
+          setSearchParams={setSearchParams}
+          searchParams={searchParams}
+          handleSubmit={handleSubmit}
+        />
+      </div>
+      <div className="col-start-1 col-end-6 ">
+        {categories ? (
+          <div>
+            <CategoryList
+              categories={categories}
+              handleChangeCategory={handleChangeCategory}
+            />
+            <BookList bookList={bookList} />
+          </div>
+        ) : (
+          <Loading />
+        )}
       </div>
     </div>
   );
