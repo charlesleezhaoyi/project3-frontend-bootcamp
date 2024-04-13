@@ -9,7 +9,7 @@ import { BACKEND_URL } from "../constants";
 
 const Onboarding = () => {
   const { isAuthenticated, user } = useAuth0();
-  // const { email } = user;
+  const { email } = user;
   const navigate = useNavigate();
   const [errorAlert, setErrorAlert] = useState(false);
   const [formData, setFormData] = useState({
@@ -53,7 +53,7 @@ const Onboarding = () => {
         }
 
         const userObj = {
-          email: user.email,
+          email: email,
           firstName: firstName,
           lastName: lastName,
           phone: phone,
@@ -65,6 +65,70 @@ const Onboarding = () => {
       } catch (error) {
         console.error("Error saving user data:", error);
         // Optionally, set an error state here to inform the user of the error.
+      }
+    }
+  };
+
+  const requestAuth0ExplorerToken = async () => {
+    const options = {
+      method: "POST",
+      url: "https://dev-8fku0sjpc2omyvc4.us.auth0.com/oauth/token",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+        client_secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+        grant_type: "client_credentials",
+      },
+    };
+
+    try {
+      const response = await axios(options);
+      const Auth0Token = response.data;
+      console.log(response.data);
+      return Auth0Token;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleVerifyEmailBtnClick = async (e) => {
+    e.preventDefault();
+
+    if (isAuthenticated && user) {
+      try {
+        const token = await requestAuth0ExplorerToken();
+        console.log(token);
+        console.log(user);
+        let data = JSON.stringify({
+          user_id: user.sub,
+          client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+        });
+
+        let config = {
+          method: "post",
+          maxBodyLength: Infinity,
+          url: "https://dev-8fku0sjpc2omyvc4.us.auth0.com/api/v2/jobs/verification-email",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token.access_token}`,
+          },
+          data: data,
+        };
+
+        axios
+          .request(config)
+          .then((response) => {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
       }
     }
   };
@@ -282,10 +346,19 @@ const Onboarding = () => {
           <button
             type="submit"
             className="sticky rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onClick={handleVerifyEmailBtnClick}
+          >
+            Verify Email
+          </button>
+          {/* {user.email_verified ? ( */}
+          <button
+            type="submit"
+            className="sticky rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={handleSaveBtnClick}
           >
-            Save
+            Complete
           </button>
+          {/* ) : null} */}
         </div>
       </form>
     </div>
