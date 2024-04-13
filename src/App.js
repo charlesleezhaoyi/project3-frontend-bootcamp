@@ -3,6 +3,8 @@ import "./App.css";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import ErrorPopUp from "./components/Common/ErrorPopUp";
 import NavBar from "./components/Common/NavBar";
+import MenuBookTwoToneIcon from "@mui/icons-material/MenuBookTwoTone";
+
 function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const location = useLocation();
@@ -10,14 +12,14 @@ function App() {
 
   useEffect(() => {
     if (location.pathname === "/") {
-      navigate("/home");
+      navigate("/");
     }
   }, [location, navigate]);
 
   return (
     <div className="App">
       <NavBar setErrorMessage={setErrorMessage} />
-      <div className="w-full border-t-2 border-primary flex flex-col items-center">
+      <div className="w-full border-t-2 border-gray-800 flex flex-col items-center">
         <Outlet context={[errorMessage, setErrorMessage]} />
       </div>
       <ErrorPopUp
@@ -25,15 +27,21 @@ function App() {
         setErrorMessage={setErrorMessage}
       />
 
-      {/* <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Book Donation</h1>
-
-            <button className="btn btn-primary">Login</button>
+      <div className="hero min-h-screen ">
+        <div className="hero-content flex-col ">
+          <div>
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-wider text-left ml-3 text-center">
+              Book Donation App
+            </h1>
+            <p className="ml-3 py-3 text-sm">
+              A platform to post and to request a book.
+            </p>
+            <div>
+              <MenuBookTwoToneIcon fontSize="large" />
+            </div>
           </div>
         </div>
-      </div>*/}
+      </div>
     </div>
   );
 }
