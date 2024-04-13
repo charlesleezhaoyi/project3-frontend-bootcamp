@@ -12,7 +12,12 @@ function AuthWrapper({ children }) {
       if (!isAuthenticated) {
         // If the user is not authenticated, we start the login process
         loginWithRedirect();
-      } else if (isAuthenticated && !user.email.verified) {
+      } else if (
+        isAuthenticated &&
+        user &&
+        user.email &&
+        !user.email.verified
+      ) {
         // If the user is authenticated, we send their data to our API
         axios.post(`${BACKEND_URL}/users`, {
           email: user.email,

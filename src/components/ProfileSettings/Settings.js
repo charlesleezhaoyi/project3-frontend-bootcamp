@@ -10,14 +10,16 @@ import UserRequestList from "./UserRequestList";
 import Loading from "../Common/Loading";
 
 const Settings = ({ open, setOpen, setErrorMessage }) => {
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const getUserData = async () => {
+      const token = await getAccessTokenSilently();
       try {
         const userDataRes = await axios.get(
-          `${BACKEND_URL}/users/${user.email}`
+          `${BACKEND_URL}/users/${user.email}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setUserData(userDataRes.data);
       } catch (error) {

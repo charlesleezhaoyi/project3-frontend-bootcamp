@@ -24,7 +24,7 @@ const defaultInput = {
 };
 
 const NewBook = () => {
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [inputData, setInputData] = useState(defaultInput);
   const [photoArr, setPhotoArr] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -90,7 +90,14 @@ const NewBook = () => {
       for (const { file } of photoArr) {
         formData.append(`image`, file);
       }
-      const res = await axios.post(`${BACKEND_URL}/books`, formData);
+      const token = await getAccessTokenSilently();
+      console.log(token);
+      const res = await axios.post(`${BACKEND_URL}/books`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const bookId = res.data.id;
 
       return navigate(`/books/${bookId}`);
