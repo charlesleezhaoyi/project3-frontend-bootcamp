@@ -67,34 +67,26 @@ const Home = () => {
   };
 
   return (
-    <div className="w-full text-center flex flex-col items-center">
-      <SearchBar
-        setSearchParams={setSearchParams}
-        searchParams={searchParams}
-        handleSubmit={handleSubmit}
-      />
-      {categories ? (
-        <div className="w-full sm:w-5/6">
-          <CategoryList
-            selectedCategory={category}
-            categories={categories}
-            handleChangeCategory={handleChangeCategory}
-          />
-          <BookList bookList={bookList} />
-        </div>
-      ) : (
-        <Loading />
-      )}
-      <div className="flex gap-4 justify-center items-center my-12">
-        <button onClick={() => navigate("/create-newbook")}>
-          <AddCircleOutlineRoundedIcon fontSize="large" />
-        </button>
-        <button onClick={() => navigate("/forum")}>
-          <ForumRoundedIcon fontSize="large" />
-        </button>
-        <div className="m-4">
-          <LogoutButton />
-        </div>
+    <div className="grid grid-cols-5 w-screen">
+      <div className="col-start-2 col-span-3 ">
+        <SearchBar
+          setSearchParams={setSearchParams}
+          searchParams={searchParams}
+          handleSubmit={handleSubmit}
+        />
+      </div>
+      <div className="col-start-1 col-end-6 ">
+        {categories ? (
+          <div>
+            <CategoryList
+              categories={categories}
+              handleChangeCategory={handleChangeCategory}
+            />
+            <BookList bookList={bookList} />
+          </div>
+        ) : (
+          <Loading />
+        )}
       </div>
     </div>
   );
