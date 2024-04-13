@@ -8,7 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 export default function ForumCreatePost() {
   const [, setErrorMessage] = useOutletContext();
   const navigate = useNavigate();
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [titleInput, setTitleInput] = useState("");
   const [choosenCategories, setChoosenCategories] = useState([]);
@@ -34,6 +34,7 @@ export default function ForumCreatePost() {
 
   const handleSubmit = async () => {
     try {
+      const token = await getAccessTokenSilently();
       if (!titleInput.length) {
         throw new Error("Title cannot be empty");
       }
@@ -52,7 +53,8 @@ export default function ForumCreatePost() {
       };
       const newPostRes = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/posts`,
-        postData
+        postData,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       navigate(`/forum/posts/${newPostRes.data.id}?isNewPost=true`);
     } catch (error) {
@@ -108,7 +110,7 @@ export default function ForumCreatePost() {
           className="btn w-5/6 btn-outline"
           onClick={() => handleSubmit()}
         >
-          Sumbit
+          Submit
         </button>
       </div>
     </div>

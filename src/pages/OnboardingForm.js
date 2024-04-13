@@ -9,11 +9,9 @@ import { BACKEND_URL } from "../constants";
 
 const Onboarding = () => {
   const { isAuthenticated, user } = useAuth0();
-  const { email } = user;
+  // const { email } = user;
   const navigate = useNavigate();
-
   const [errorAlert, setErrorAlert] = useState(false);
-
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -30,23 +28,37 @@ const Onboarding = () => {
   const handleSaveBtnClick = async (e) => {
     e.preventDefault();
 
-    console.log(isAuthenticated, user.email_verified);
-    // The isAuthenticated check and the rest of the logic should be inside this function.
-    if (isAuthenticated) {
+    console.log(isAuthenticated);
+    console.log(user);
+    if (isAuthenticated && user) {
       if (!user.email_verified) {
         setErrorAlert(
           <ErrorAlert message="Please verify your email address." />
         );
       }
       try {
-        const { firstName, lastName, phone, smsConsent } = formData;
+        const { firstName, lastName, phone, smsConsent, emailConsent } =
+          formData;
+
+        // Check if all necessary data fields are defined
+        if (
+          !firstName ||
+          !lastName ||
+          !phone ||
+          smsConsent === undefined ||
+          emailConsent === undefined
+        ) {
+          console.error("Missing user data");
+          return;
+        }
 
         const userObj = {
-          email: email,
+          email: user.email,
           firstName: firstName,
           lastName: lastName,
           phone: phone,
           smsConsent: smsConsent,
+          emailConsent: emailConsent,
         };
         await axios.put(`${BACKEND_URL}/users`, userObj);
         navigate("/home"); // Navigate after successful update
@@ -132,44 +144,6 @@ const Onboarding = () => {
                   </div>
                 </div>
               </div>
-
-              <div className="col-span-full">
-                <label
-                  htmlFor="photo"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Profile Picture
-                </label>
-              </div>
-
-              <div className="col-span-full">
-                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                  <div className="text-center">
-                    {/* <PhotoIcon
-                      className="mx-auto h-12 w-12 text-gray-300"
-                      aria-hidden="true"
-                    /> */}
-                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                      >
-                        <span>Upload a file</span>
-                        <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                        />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
-                    </div>
-                    <p className="text-xs leading-5 text-gray-600">
-                      PNG, JPG, GIF up to 10MB
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
           <div className="border-b border-gray-900/10 pb-12">
@@ -196,10 +170,11 @@ const Onboarding = () => {
                   <div className="relative flex gap-x-3">
                     <div className="flex h-6 items-center">
                       <input
-                        id="emailnotificationsrequests"
-                        name="emailnotificationsrequests"
+                        id="emailConsent"
+                        name="emailConsent"
                         type="checkbox"
                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="text-sm leading-6">

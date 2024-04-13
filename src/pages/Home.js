@@ -12,17 +12,16 @@ import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Loading from "../components/Common/Loading.js";
 import { useAuth0 } from "@auth0/auth0-react";
-import NavBar from "../components/Common/NavBar.js";
+import LogoutButton from "../components/LogoutButton.js";
 
 const Home = () => {
-  const [errorMessage, setErrorMessage] = useOutletContext();
+  const [, setErrorMessage] = useOutletContext();
   const { categories } = useLoadCategories();
   const { books } = useLoadBooks();
   const [category, setCategory] = useState(null);
   const [bookList, setBookList] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,16 +33,21 @@ const Home = () => {
   useEffect(() => {
     if (!isAuthenticated || !user.email_verified) {
       navigate("/onboarding");
-      // navigate("/home");
     }
   }, []);
 
   const handleChangeCategory = async (categoryName) => {
     try {
+      const token = await getAccessTokenSilently();
       setBookList(null);
       setCategory(categoryName);
       const response = await axios.get(
-        `${BACKEND_URL}/books/category/${categoryName}`
+        `${BACKEND_URL}/books/category/${categoryName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const filteredBooks = response.data;
       setBookList(filteredBooks);

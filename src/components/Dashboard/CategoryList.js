@@ -1,4 +1,8 @@
-export default function CategoryList({ categories, handleChangeCategory }) {
+export default function CategoryList({
+  selectedCategory,
+  categories,
+  handleChangeCategory,
+}) {
   return (
     <div className="mx-auto py-4 lg:py-8">
       <h2 className="text-2xl font-bold">Categories</h2>
@@ -16,6 +20,5 @@ export default function CategoryList({ categories, handleChangeCategory }) {
         ))}
       </div>
     </div>
-    // </div>
   );
 }
