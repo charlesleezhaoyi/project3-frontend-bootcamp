@@ -72,7 +72,7 @@ const Onboarding = () => {
   const requestAuth0ExplorerToken = async () => {
     const options = {
       method: "POST",
-      url: "https://dev-8fku0sjpc2omyvc4.us.auth0.com/oauth/token",
+      url: process.env.REACT_APP_AUTH0_ENDPOINT_URL,
       headers: {
         "Content-Type": "application/json",
       },
@@ -100,8 +100,6 @@ const Onboarding = () => {
     if (isAuthenticated && user) {
       try {
         const token = await requestAuth0ExplorerToken();
-        console.log(token);
-        console.log(user);
         let data = JSON.stringify({
           user_id: user.sub,
           client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
@@ -110,7 +108,7 @@ const Onboarding = () => {
         let config = {
           method: "post",
           maxBodyLength: Infinity,
-          url: "https://dev-8fku0sjpc2omyvc4.us.auth0.com/api/v2/jobs/verification-email",
+          url: process.env.REACT_APP_AUTH0_EMAIL_ENDPOINT_URL,
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
