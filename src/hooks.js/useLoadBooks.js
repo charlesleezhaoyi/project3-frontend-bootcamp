@@ -16,7 +16,6 @@ const useLoadBooks = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("here");
       const booksData = res.data;
       setBooks(booksData);
       setRefreshBooks(false);
