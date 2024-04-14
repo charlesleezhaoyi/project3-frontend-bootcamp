@@ -43,42 +43,40 @@ export default function NavBar({ setErrorMessage }) {
   };
 
   return (
-    <>
-      <div className="navbar bg-base-100">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <MenuOutlinedIcon />
-            </div>
-            <ul
-              tabIndex={0}
-              className="shadow-md menu menu-sm dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-            >
-              {navbarItems()}
-            </ul>
+    <div className="navbar bg-base-100">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+            <MenuOutlinedIcon />
           </div>
-
-          <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal px-6">{navbarItems()}</ul>
-          </div>
+          <ul
+            tabIndex={0}
+            className="shadow-md menu menu-sm dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            {navbarItems()}
+          </ul>
         </div>
-        <div className="navbar-end mr-6">
-          <Link onClick={() => setSlideOverOpen(true)}>
-            {user ? (
-              <AccountCircleOutlinedIcon fontSize="large" />
-            ) : (
-              <LoginButton />
-            )}
-          </Link>
-          {user && (
-            <Settings
-              open={slideOverOpen}
-              setOpen={setSlideOverOpen}
-              setErrorMessage={setErrorMessage}
-            />
-          )}
+
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-6">{navbarItems()}</ul>
         </div>
       </div>
-    </>
+      <div className="navbar-end mr-6">
+        <Link onClick={() => setSlideOverOpen(true)}>
+          {user ? (
+            <AccountCircleOutlinedIcon fontSize="large" />
+          ) : (
+            <LoginButton />
+          )}
+        </Link>
+        {user && (
+          <Settings
+            open={slideOverOpen}
+            setOpen={setSlideOverOpen}
+            setErrorMessage={setErrorMessage}
+          />
+        )}
+      </div>
+    </div>
   );
 }

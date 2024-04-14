@@ -1,59 +1,41 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-
-import ErrorAlert from "../components/Common/ErrorAlert";
 import CategoryRanking from "../components/Common/CategoryRanking";
 import axios from "axios";
 import { BACKEND_URL } from "../constants";
 
 const Onboarding = () => {
-  const { isAuthenticated, user } = useAuth0();
-  const { email } = user;
+  const { isAuthenticated, user, logout } = useAuth0();
+  const [, setErrorMessage] = useOutletContext();
   const navigate = useNavigate();
-  const [errorAlert, setErrorAlert] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     phone: "",
     bookPreferences: [],
-    emailNotifications: {
-      comments: false,
-      candidates: false,
-      offers: false,
-    },
-    pushNotifications: "",
+    smsConsent: false,
+    emailConsent: false,
   });
 
   const handleSaveBtnClick = async (e) => {
     e.preventDefault();
-
-    console.log(isAuthenticated);
-    console.log(user);
     if (isAuthenticated && user) {
-      if (!user.email_verified) {
-        setErrorAlert(
-          <ErrorAlert message="Please verify your email address." />
-        );
-      }
       try {
+        if (!user.email_verified) {
+          throw new Error("Please verify your email address.");
+        }
         const { firstName, lastName, phone, smsConsent, emailConsent } =
           formData;
-
-        // Check if all necessary data fields are defined
         if (
-          !firstName ||
-          !lastName ||
-          !phone ||
-          smsConsent === undefined ||
-          emailConsent === undefined
+          !formData.firstName.length ||
+          !formData.lastName.length ||
+          !formData.phone.length
         ) {
-          console.error("Missing user data");
-          return;
+          throw new Error("Missing user data");
         }
-
         const userObj = {
-          email: email,
+          email: user.email,
           firstName: firstName,
           lastName: lastName,
           phone: phone,
@@ -61,10 +43,9 @@ const Onboarding = () => {
           emailConsent: emailConsent,
         };
         await axios.put(`${BACKEND_URL}/users`, userObj);
-        navigate("/home"); // Navigate after successful update
+        navigate("/home");
       } catch (error) {
-        console.error("Error saving user data:", error);
-        // Optionally, set an error state here to inform the user of the error.
+        setErrorMessage(error.message);
       }
     }
   };
@@ -87,10 +68,9 @@ const Onboarding = () => {
     try {
       const response = await axios(options);
       const Auth0Token = response.data;
-      console.log(response.data);
       return Auth0Token;
     } catch (error) {
-      console.log(error);
+      setErrorMessage(error.message);
     }
   };
 
@@ -126,7 +106,7 @@ const Onboarding = () => {
             console.log(error);
           });
       } catch (error) {
-        console.log(error);
+        setErrorMessage(error.message);
       }
     }
   };
@@ -247,29 +227,7 @@ const Onboarding = () => {
                         Requests
                       </label>
                       <p className="text-gray-500">
-                        Get notified when someones requests to receive your
-                        donated book
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative flex gap-x-3">
-                    <div className="flex h-6 items-center">
-                      <input
-                        id="emailnotificationsdonations"
-                        name="emailnotificationsdonations"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                      />
-                    </div>
-                    <div className="text-sm leading-6">
-                      <label
-                        htmlFor="candidates"
-                        className="font-medium text-gray-900"
-                      >
-                        Donations
-                      </label>
-                      <p className="text-gray-500">
-                        Get notified when anyone donates their books
+                        Get notified when your request is accepted by donor
                       </p>
                     </div>
                   </div>
@@ -301,29 +259,7 @@ const Onboarding = () => {
                         Requests
                       </label>
                       <p className="text-gray-500">
-                        Get notified when someones requests to receive your
-                        donated book
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative flex gap-x-3">
-                    <div className="flex h-6 items-center">
-                      <input
-                        id="smsnotificationdonation"
-                        name="smsnotificationdonation"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                      />
-                    </div>
-                    <div className="text-sm leading-6">
-                      <label
-                        htmlFor="candidates"
-                        className="font-medium text-gray-900"
-                      >
-                        Donations
-                      </label>
-                      <p className="text-gray-500">
-                        Get notified when anyone donates their books
+                        Get notified when your request is accepted by donor
                       </p>
                     </div>
                   </div>
@@ -337,10 +273,10 @@ const Onboarding = () => {
           <button
             type="button"
             className="text-sm font-semibold leading-6 text-gray-900"
+            onClick={() => logout()}
           >
             Cancel
           </button>
-          {/* {errorAlert} */}
           <button
             type="submit"
             className="sticky rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -348,7 +284,6 @@ const Onboarding = () => {
           >
             Verify Email
           </button>
-          {/* {user.email_verified ? ( */}
           <button
             type="submit"
             className="sticky rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -356,7 +291,6 @@ const Onboarding = () => {
           >
             Complete
           </button>
-          {/* ) : null} */}
         </div>
       </form>
     </div>
