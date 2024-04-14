@@ -8,10 +8,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 import UserDonationList from "./UserDonationList";
 import UserRequestList from "./UserRequestList";
 import Loading from "../Common/Loading";
+import { useLocation } from "react-router-dom";
 
 const Settings = ({ open, setOpen, setErrorMessage }) => {
   const { user, getAccessTokenSilently } = useAuth0();
   const [userData, setUserData] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     const getUserData = async () => {
@@ -27,7 +29,7 @@ const Settings = ({ open, setOpen, setErrorMessage }) => {
       }
     };
     getUserData();
-  }, [user.email, setErrorMessage]);
+  }, [user.email, setErrorMessage, location.pathname, getAccessTokenSilently]);
 
   return (
     <Transition.Root show={open} as={Fragment}>

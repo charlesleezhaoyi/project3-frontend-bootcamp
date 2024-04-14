@@ -7,6 +7,7 @@ import { BACKEND_URL } from "../constants";
 
 const Onboarding = () => {
   const { user, logout, getAccessTokenSilently } = useAuth0();
+  const [sentVerifyEmail, setSentVerifyEmail] = useState(false);
   const [, setErrorMessage] = useOutletContext();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -98,6 +99,7 @@ const Onboarding = () => {
           Authorization: `Bearer ${token.access_token}`,
         },
       });
+      setSentVerifyEmail(true);
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -272,6 +274,7 @@ const Onboarding = () => {
           <button
             type="submit"
             className="sticky rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            disabled={sentVerifyEmail}
             onClick={handleVerifyEmailBtnClick}
           >
             Verify Email
