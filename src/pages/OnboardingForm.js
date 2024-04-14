@@ -6,7 +6,7 @@ import axios from "axios";
 import { BACKEND_URL } from "../constants";
 
 const Onboarding = () => {
-  const { user, logout } = useAuth0();
+  const { user, logout, getAccessTokenSilently } = useAuth0();
   const [, setErrorMessage] = useOutletContext();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -48,7 +48,10 @@ const Onboarding = () => {
         smsConsent: smsConsent,
         emailConsent: emailConsent,
       };
-      await axios.put(`${BACKEND_URL}/users`, userObj);
+      const token = await getAccessTokenSilently();
+      await axios.put(`${BACKEND_URL}/users`, userObj, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       navigate("/home");
     } catch (error) {
       setErrorMessage(error.message);

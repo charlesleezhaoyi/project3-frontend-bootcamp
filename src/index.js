@@ -55,7 +55,6 @@ root.render(
             <Route path="categories/:category" element={<ForumSubSection />} />
             <Route path="posts/:postId" element={<ForumPost />} />
           </Route>
-          {/* <Route path="*" element={"Nothing here!"} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

@@ -5,7 +5,13 @@ import { BACKEND_URL } from "../constants";
 import Loading from "./Common/Loading";
 
 function AuthWrapper({ children }) {
-  const { isAuthenticated, isLoading, loginWithRedirect, user } = useAuth0();
+  const {
+    isAuthenticated,
+    isLoading,
+    loginWithRedirect,
+    user,
+    getAccessTokenSilently,
+  } = useAuth0();
 
   useEffect(() => {
     if (!isLoading) {
@@ -19,12 +25,29 @@ function AuthWrapper({ children }) {
         !user.email.verified
       ) {
         // If the user is authenticated, we send their data to our API
-        axios.post(`${BACKEND_URL}/users`, {
-          email: user.email,
-        });
+        const sendData = async () => {
+          const token = await getAccessTokenSilently();
+          axios.post(
+            `${BACKEND_URL}/users`,
+            {
+              email: user.email,
+            },
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+        };
+
+        sendData();
       }
     }
-  }, [isAuthenticated, isLoading, loginWithRedirect, user]);
+  }, [
+    isAuthenticated,
+    isLoading,
+    loginWithRedirect,
+    user,
+    getAccessTokenSilently,
+  ]);
 
   if (isLoading) {
     return <Loading />;
