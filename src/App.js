@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import ErrorPopUp from "./components/Common/ErrorPopUp";
 import NavBar from "./components/Common/NavBar";
 import MenuBookTwoToneIcon from "@mui/icons-material/MenuBookTwoTone";
@@ -8,18 +8,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
   const [errorMessage, setErrorMessage] = useState("");
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
 
-  // useEffect(() => {
-  //   if (location.pathname === "/") {
-  //     navigate("/");
-  //   }
-  // }, [location, navigate]);
-
-  console.log(user);
-  console.log(isAuthenticated);
   return (
     <div className="App">
       <NavBar setErrorMessage={setErrorMessage} />
@@ -31,7 +21,7 @@ function App() {
         setErrorMessage={setErrorMessage}
       />
 
-      {!isAuthenticated && (
+      {!isAuthenticated && !isLoading && (
         <div className="hero min-h-screen ">
           <div className="hero-content flex-col ">
             <div>
