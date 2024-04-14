@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Settings from ".././ProfileSettings/Settings";
 import { useAuth0 } from "@auth0/auth0-react";
-import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LoginButton from "../LoginButton";
 export default function NavBar({ setErrorMessage }) {

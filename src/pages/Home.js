@@ -7,17 +7,14 @@ import CategoryList from "../components/Dashboard/CategoryList";
 import SearchBar from "../components/Dashboard/SearchBar";
 import useLoadCategories from "../hooks.js/useLoadCategories.js";
 import useLoadBooks from "../hooks.js/useLoadBooks.js";
-import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Loading from "../components/Common/Loading.js";
 import { useAuth0 } from "@auth0/auth0-react";
-import LogoutButton from "../components/LogoutButton.js";
 
 const Home = () => {
   const [, setErrorMessage] = useOutletContext();
   const { categories } = useLoadCategories();
-  const { books } = useLoadBooks();
+  const { books, setRefreshBooks } = useLoadBooks();
   const [category, setCategory] = useState(null);
   const [bookList, setBookList] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,9 +31,14 @@ const Home = () => {
     if (!isAuthenticated || !user.email_verified) {
       navigate("/onboarding");
     }
-  }, []);
+  }, [navigate, user, isAuthenticated]);
 
   const handleChangeCategory = async (categoryName) => {
+    if (category === categoryName) {
+      setRefreshBooks(true);
+      setCategory(null);
+      return;
+    }
     try {
       const token = await getAccessTokenSilently();
       setBookList(null);
@@ -79,6 +81,7 @@ const Home = () => {
         {categories ? (
           <div>
             <CategoryList
+              selectedCategory={category}
               categories={categories}
               handleChangeCategory={handleChangeCategory}
             />

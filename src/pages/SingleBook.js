@@ -27,7 +27,7 @@ const SingleBook = () => {
   useEffect(() => {
     const getBookAndRequest = async () => {
       try {
-        const token = await getAccessTokenSilently({});
+        const token = await getAccessTokenSilently();
         const bookRes = await axios.get(`${BACKEND_URL}/books/${bookId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -56,7 +56,7 @@ const SingleBook = () => {
     if (!isLoading) {
       getBookAndRequest();
     }
-  }, [bookId, isLoading, user, setErrorMessage]);
+  }, [bookId, isLoading, user, setErrorMessage, getAccessTokenSilently]);
 
   useEffect(() => {
     return function clearupUrl() {
