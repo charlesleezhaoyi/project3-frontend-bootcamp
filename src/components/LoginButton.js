@@ -9,7 +9,7 @@ const LoginButton = () => {
   };
 
   return (
-    <button className="btn btn-primary" onClick={loginAndRedirect}>
+    <button className="btn bg-gray-800 text-white" onClick={loginAndRedirect}>
       Log In
     </button>
   );
