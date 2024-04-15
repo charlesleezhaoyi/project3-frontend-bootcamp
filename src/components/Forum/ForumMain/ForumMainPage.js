@@ -4,6 +4,7 @@ import Select from "react-select";
 import axios from "axios";
 import SectionColumn from "./SectionColumn";
 import Loading from "../../Common/Loading";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const sortOption = [
   { label: "Category", value: "name" },
@@ -16,11 +17,19 @@ export default function ForumMainPage() {
   const [, setErrorMessage] = useOutletContext();
   const [categoryList, setCategoryList] = useState([]);
   const [sort, setSort] = useState("name");
+  const { getAccessTokenSilently } = useAuth0();
+
   useEffect(() => {
     const getCategoryList = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const { data } = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/categories/all/sort/${sort}`
+          `${process.env.REACT_APP_BACKEND_URL}/categories/all/sort/${sort}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setCategoryList(data);
       } catch (error) {
@@ -28,7 +37,7 @@ export default function ForumMainPage() {
       }
     };
     getCategoryList();
-  }, [setErrorMessage, sort]);
+  }, [setErrorMessage, sort, getAccessTokenSilently]);
 
   const sectionList = !!categoryList.length ? (
     categoryList.map((category) => (
