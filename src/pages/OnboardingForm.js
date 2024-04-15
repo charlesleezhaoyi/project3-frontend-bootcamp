@@ -263,7 +263,7 @@ const Onboarding = () => {
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-end gap-x-6">
+        <div className="my-6 flex items-center justify-end gap-x-6">
           <button
             type="button"
             className="btn btn-ghost"
@@ -277,7 +277,7 @@ const Onboarding = () => {
             disabled={sentVerifyEmail}
             onClick={handleVerifyEmailBtnClick}
           >
-            Verify Email
+            Resend Verify Email
           </button>
           <button
             type="submit"
