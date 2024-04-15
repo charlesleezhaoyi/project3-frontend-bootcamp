@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Loading from "../../Common/Loading";
 import OutputUserName from "../../Common/OutputUserName";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function SectionColumn({ category, sort, setErrorMessage }) {
   const [postData, setPostData] = useState(null);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     const getPostData = async () => {
@@ -15,8 +17,10 @@ export default function SectionColumn({ category, sort, setErrorMessage }) {
         const sortBy =
           sort === "name" || sort === "popularSection" ? "popular" : sort;
 
+        const token = await getAccessTokenSilently();
         const { data } = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/posts/category/${category.name}?sortBy=${sortBy}&limit=1`
+          `${process.env.REACT_APP_BACKEND_URL}/posts/category/${category.name}?sortBy=${sortBy}&limit=1`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setPostData(data[0]);
         setIsLoadingData(false);
@@ -25,7 +29,7 @@ export default function SectionColumn({ category, sort, setErrorMessage }) {
       }
     };
     getPostData();
-  }, [setErrorMessage, sort, category.name]);
+  }, [setErrorMessage, sort, category.name, getAccessTokenSilently]);
 
   const authorName = postData && OutputUserName(postData.author);
 

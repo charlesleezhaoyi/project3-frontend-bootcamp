@@ -7,7 +7,7 @@ export default function RequestStatus({ request, setErrorMessage }) {
   const handleChangeStatus = async (status) => {
     try {
       const token = await getAccessTokenSilently();
-      await axios.post(
+      await axios.put(
         `${BACKEND_URL}/requests/status`,
         {
           donationId: request.donationId,

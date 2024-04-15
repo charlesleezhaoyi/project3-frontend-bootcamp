@@ -17,8 +17,10 @@ export default function ForumCreatePost() {
   useEffect(() => {
     const getCategoriesOption = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const { data } = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/categories/all`
+          `${process.env.REACT_APP_BACKEND_URL}/categories/all`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setCategoryOptions(
           data.map((category) => {
@@ -30,11 +32,10 @@ export default function ForumCreatePost() {
       }
     };
     getCategoriesOption();
-  }, [setErrorMessage]);
+  }, [setErrorMessage, getAccessTokenSilently]);
 
   const handleSubmit = async () => {
     try {
-      const token = await getAccessTokenSilently();
       if (!titleInput.length) {
         throw new Error("Title cannot be empty");
       }
@@ -51,6 +52,7 @@ export default function ForumCreatePost() {
         content: contentInput,
         categories,
       };
+      const token = await getAccessTokenSilently();
       const newPostRes = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/posts`,
         postData,

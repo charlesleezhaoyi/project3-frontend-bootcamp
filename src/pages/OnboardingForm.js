@@ -1,133 +1,107 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-
-import ErrorAlert from "../components/Common/ErrorAlert";
 import CategoryRanking from "../components/Common/CategoryRanking";
 import axios from "axios";
 import { BACKEND_URL } from "../constants";
 
 const Onboarding = () => {
-  const { isAuthenticated, user } = useAuth0();
-  const { email } = user;
+  const { user, logout, getAccessTokenSilently } = useAuth0();
+  const [sentVerifyEmail, setSentVerifyEmail] = useState(false);
+  const [, setErrorMessage] = useOutletContext();
   const navigate = useNavigate();
-  const [errorAlert, setErrorAlert] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     phone: "",
     bookPreferences: [],
-    emailNotifications: {
-      comments: false,
-      candidates: false,
-      offers: false,
-    },
-    pushNotifications: "",
+    smsConsent: false,
+    emailConsent: false,
   });
 
   const handleSaveBtnClick = async (e) => {
     e.preventDefault();
 
-    console.log(isAuthenticated);
-    console.log(user);
-    if (isAuthenticated && user) {
-      if (!user.email_verified) {
-        setErrorAlert(
-          <ErrorAlert message="Please verify your email address." />
-        );
-      }
-      try {
-        const { firstName, lastName, phone, smsConsent, emailConsent } =
-          formData;
-
-        // Check if all necessary data fields are defined
-        if (
-          !firstName ||
-          !lastName ||
-          !phone ||
-          smsConsent === undefined ||
-          emailConsent === undefined
-        ) {
-          console.error("Missing user data");
-          return;
+    try {
+      const { access_token } = await requestAuth0ExplorerToken();
+      const newestUserInfoRes = await axios.get(
+        `https://${process.env.REACT_APP_DOMAIN}/api/v2/users/${user.sub}`,
+        {
+          headers: { Authorization: `Bearer ${access_token}` },
         }
-
-        const userObj = {
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-          phone: phone,
-          smsConsent: smsConsent,
-          emailConsent: emailConsent,
-        };
-        await axios.put(`${BACKEND_URL}/users`, userObj);
-        navigate("/home"); // Navigate after successful update
-      } catch (error) {
-        console.error("Error saving user data:", error);
-        // Optionally, set an error state here to inform the user of the error.
+      );
+      if (!newestUserInfoRes.data.email_verified) {
+        throw new Error("Please verify your email address.");
       }
+      const { firstName, lastName, phone, smsConsent, emailConsent } = formData;
+      if (
+        !formData.firstName.length ||
+        !formData.lastName.length ||
+        !formData.phone.length
+      ) {
+        throw new Error("Missing user data");
+      }
+      const userObj = {
+        email: user.email,
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+        smsConsent: smsConsent,
+        emailConsent: emailConsent,
+      };
+      const token = await getAccessTokenSilently();
+      await axios.put(`${BACKEND_URL}/users`, userObj, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      navigate("/home");
+    } catch (error) {
+      setErrorMessage(error.message);
     }
   };
 
   const requestAuth0ExplorerToken = async () => {
-    const options = {
-      method: "POST",
-      url: process.env.REACT_APP_AUTH0_ENDPOINT_URL,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
-        client_secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
-        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-        grant_type: "client_credentials",
-      },
-    };
-
     try {
-      const response = await axios(options);
+      const response = await axios.post(
+        process.env.REACT_APP_AUTH0_ENDPOINT_URL,
+        {
+          client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+          client_secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
+          audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+          grant_type: "client_credentials",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const Auth0Token = response.data;
-      console.log(response.data);
       return Auth0Token;
     } catch (error) {
-      console.log(error);
+      setErrorMessage(error.message);
     }
   };
 
   const handleVerifyEmailBtnClick = async (e) => {
     e.preventDefault();
 
-    if (isAuthenticated && user) {
-      try {
-        const token = await requestAuth0ExplorerToken();
-        let data = JSON.stringify({
-          user_id: user.sub,
-          client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
-        });
+    try {
+      const token = await requestAuth0ExplorerToken();
+      let data = JSON.stringify({
+        user_id: user.sub,
+        client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+      });
 
-        let config = {
-          method: "post",
-          maxBodyLength: Infinity,
-          url: process.env.REACT_APP_AUTH0_EMAIL_ENDPOINT_URL,
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${token.access_token}`,
-          },
-          data: data,
-        };
-
-        axios
-          .request(config)
-          .then((response) => {
-            console.log(JSON.stringify(response.data));
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } catch (error) {
-        console.log(error);
-      }
+      await axios.post(process.env.REACT_APP_AUTH0_EMAIL_ENDPOINT_URL, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token.access_token}`,
+        },
+      });
+      setSentVerifyEmail(true);
+    } catch (error) {
+      setErrorMessage(error.message);
     }
   };
 
@@ -247,29 +221,7 @@ const Onboarding = () => {
                         Requests
                       </label>
                       <p className="text-gray-500">
-                        Get notified when someones requests to receive your
-                        donated book
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative flex gap-x-3">
-                    <div className="flex h-6 items-center">
-                      <input
-                        id="emailnotificationsdonations"
-                        name="emailnotificationsdonations"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                      />
-                    </div>
-                    <div className="text-sm leading-6">
-                      <label
-                        htmlFor="candidates"
-                        className="font-medium text-gray-900"
-                      >
-                        Donations
-                      </label>
-                      <p className="text-gray-500">
-                        Get notified when anyone donates their books
+                        Get notified when your request is accepted by donor
                       </p>
                     </div>
                   </div>
@@ -301,29 +253,7 @@ const Onboarding = () => {
                         Requests
                       </label>
                       <p className="text-gray-500">
-                        Get notified when someones requests to receive your
-                        donated book
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative flex gap-x-3">
-                    <div className="flex h-6 items-center">
-                      <input
-                        id="smsnotificationdonation"
-                        name="smsnotificationdonation"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                      />
-                    </div>
-                    <div className="text-sm leading-6">
-                      <label
-                        htmlFor="candidates"
-                        className="font-medium text-gray-900"
-                      >
-                        Donations
-                      </label>
-                      <p className="text-gray-500">
-                        Get notified when anyone donates their books
+                        Get notified when your request is accepted by donor
                       </p>
                     </div>
                   </div>
@@ -333,30 +263,29 @@ const Onboarding = () => {
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-end gap-x-6">
+        <div className="my-6 flex items-center justify-end gap-x-6">
           <button
             type="button"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            className="btn btn-ghost"
+            onClick={() => logout()}
           >
             Cancel
           </button>
-          {/* {errorAlert} */}
           <button
             type="submit"
-            className="sticky rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="btn btn-accent"
+            disabled={sentVerifyEmail}
             onClick={handleVerifyEmailBtnClick}
           >
-            Verify Email
+            Resend Verify Email
           </button>
-          {/* {user.email_verified ? ( */}
           <button
             type="submit"
-            className="sticky rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="btn btn-success"
             onClick={handleSaveBtnClick}
           >
             Complete
           </button>
-          {/* ) : null} */}
         </div>
       </form>
     </div>

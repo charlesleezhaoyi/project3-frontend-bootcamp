@@ -91,7 +91,6 @@ const NewBook = () => {
         formData.append(`image`, file);
       }
       const token = await getAccessTokenSilently();
-      console.log(token);
       const res = await axios.post(`${BACKEND_URL}/books`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,

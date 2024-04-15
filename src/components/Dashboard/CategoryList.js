@@ -12,7 +12,12 @@ export default function CategoryList({
             key={category.name}
             className="group relative hover:underline m-1"
           >
-            <button onClick={() => handleChangeCategory(category.name)}>
+            <button
+              className={`btn btn-ghost ${
+                selectedCategory === category.name && "btn-active"
+              }`}
+              onClick={() => handleChangeCategory(category.name)}
+            >
               <span className="absolute inset-0" />
               {category.name}
             </button>
