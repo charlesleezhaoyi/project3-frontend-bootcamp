@@ -1,31 +1,56 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../constants";
+import Loading from "./Common/Loading";
 
 function AuthWrapper({ children }) {
-  const { isAuthenticated, isLoading, loginWithRedirect, user } = useAuth0();
-  const navigate = useNavigate();
+  const {
+    isAuthenticated,
+    isLoading,
+    loginWithRedirect,
+    user,
+    getAccessTokenSilently,
+  } = useAuth0();
 
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
         // If the user is not authenticated, we start the login process
         loginWithRedirect();
-      } else if (isAuthenticated && user) {
+      } else if (
+        isAuthenticated &&
+        user &&
+        user.email &&
+        !user.email.verified
+      ) {
         // If the user is authenticated, we send their data to our API
-        axios.post("http://localhost:3000/users/", {
-          firstName: "Charles",
-          lastName: "Lee",
-          userEmail: user.email,
-          username: user.nickname,
-        });
+        const sendData = async () => {
+          const token = await getAccessTokenSilently();
+          axios.post(
+            `${BACKEND_URL}/users`,
+            {
+              email: user.email,
+            },
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+        };
+
+        sendData();
       }
     }
-  }, [isAuthenticated, isLoading, loginWithRedirect, user]);
+  }, [
+    isAuthenticated,
+    isLoading,
+    loginWithRedirect,
+    user,
+    getAccessTokenSilently,
+  ]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return isAuthenticated ? children : null;

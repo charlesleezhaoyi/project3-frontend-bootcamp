@@ -1,19 +1,39 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateY(100%) scaleY(0);
+  }
+  100% {
+    transform: translateY(20%) scaleY(1);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    transform: translateY(20%) scaleY(1);
+  }
+  100% {
+    transform: translateY(100%) scaleY(0);
+  }
+}
+
+.fade-in {
+  animation-name: fade-in;
+  animation-duration: 1s;
+  transform: translateY(20%);
+}
+
+.fade-out {
+  animation-name: fade-out;
+  animation-duration: 1s;
+}
+
+.initial-state {
+  transform: translateY(100%) scaleY(0);
 }
