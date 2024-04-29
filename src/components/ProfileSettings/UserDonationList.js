@@ -25,7 +25,7 @@ export default function UserDonationList({ setOpen, setErrorMessage }) {
       }
     };
     getUserDonationsData();
-  }, [user.email, setErrorMessage]);
+  }, [user.email, setErrorMessage, getAccessTokenSilently]);
 
   return (
     <div className="flex flex-col space-y-2">

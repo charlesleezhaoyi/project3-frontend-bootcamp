@@ -61,7 +61,7 @@ export default function ForumPost() {
     };
     getPostData();
     getIsUserLiked();
-  }, [setErrorMessage, postId, user.email, navigate]);
+  }, [setErrorMessage, postId, user.email, navigate, getAccessTokenSilently]);
 
   const handleToggleLike = async (e) => {
     const token = await getAccessTokenSilently({});

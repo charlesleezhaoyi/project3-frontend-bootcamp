@@ -1,4 +1,7 @@
-export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+export const BACKEND_URL =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_DB_URL
+    : process.env.REACT_APP_BACKEND_URL;
 
 export const STATUS_STYLE = {
   pending: "bg-base-300 p-2 text-sm rounded ",
